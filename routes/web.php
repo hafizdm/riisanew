@@ -337,6 +337,10 @@ Route::group(['namespace' => 'Finance', 'middleware' => 'auth.finance'], functio
 		Route::get('ubah-status-paid/edit{id}','PaidController@edit')->name('editpaid');
 		Route::patch('ubah-status-paid/update{id}','PaidController@update')->name('updatepaid');
 
+		// List Pengajuan Cash Advance
+		Route::get('list-advance','CashAdvanceController@index');
+
+
 		// Reset Password
 		Route::get('ganti-password-finance/{id}','ResetPasswordController@edit')->name('editpassword-finance');
 		Route::patch('ganti-password-finance/{id}','ResetPasswordController@update')->name('updatepassword-finance');
@@ -727,6 +731,26 @@ Route::group(['namespace' => 'Finance', 'middleware' => 'auth.finance'], functio
 		
 		// Route::get('upload-file-scan/{id}','PengajuanCutiController@getCuti')->name('get-cuti');
 		// Route::post('upload-file-scan/{id}','PengajuanCutiController@storeFileCuti');
+	});
+
+	Route::group(['namespace' => 'CashAdvance'], function (){
+		//pengajuan Cash Advance
+		Route::get('pengajuan-advance','CashAdvanceController@index');
+		Route::get('pengajuan-advance/create','CashAdvanceController@create');
+		Route::post('pengajuan-advance/store','CashAdvanceController@store')->name('store_pengajuan_advance');
+
+		//request pengajuan advance
+		Route::get('advance-request','CashAdvanceController@indexRequest');
+
+		//approval CO Cash Advance
+		Route::get('approval-advance','CashAdvanceController@indexApproval');
+
+
+		//pengajuan Expense report
+		Route::get('pengajuan-expense','CashAdvanceController@indexExpense');
+
+		
+
 	});
 
 });

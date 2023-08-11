@@ -276,7 +276,7 @@
           </a>
           <ul class="treeview-menu">
             <li class="">
-              <a href="#">
+              <a href="{{ url('pengajuan-advance')}}">
                 <i class="fa fa-edit"></i>Add Cash Advance
                 <span class="pull-right-container">
                   <span class="label label-warning pull-right"><?php echo navigation::requestPembelian()?></span>
@@ -286,7 +286,7 @@
 
             <li class="">
               <a href="#">
-                <i class="fa fa-edit"></i>Add Expense Report
+                <i class="fa fa-edit"></i>Payment Request
                 <span class="pull-right-container">
                   <span class="label label-warning pull-right"><?php echo navigation::requestPengeluaran()?></span>
                 </span>
@@ -508,27 +508,15 @@
                 </span>
               </a>
               <ul class="treeview-menu">
-                <li><a href="#">
+                <li><a href="{{ url('pengajuan-advance')}}">
                   <i class="fa fa-file-text-o"></i><span>Add Advance</span>
                   </a>
                 </li>
                 <li class="treeview">
-                  <a href="#">
+                  <a href="{{ url('advance-request')}}">
                     <i class="fa fa-file-text-o"></i><span>Advance Request</span>
                     <span class="pull-right-container">
-                      <span class="label label-warning pull-right">
-                        @php
-                            $spdRequestCount = \App\SPD::query()
-                              ->whereHas('employee', function ($query) {
-                                  return $query->where('karyawan.spd_report_to', \Auth::user()->user_login->id);
-                              })
-                              ->whereHas('spdApproval', function ($query) {
-                                  return $query->where('spd_approvals.status', 0);
-                              })
-                              ->count();
-                         @endphp
-                         {{$spdRequestCount}}
-                      </span>
+                     
                     </span>
                   </a>
                 </li>
@@ -540,19 +528,19 @@
             <li class="treeview">
               <a href="#">
                 <i class="#"></i>
-                <span>Expense Report</span>
+                <span>Payment Request</span>
                 <span class="pull-right-container">
                   <i class="fa fa-angle-left pull-right"></i>
                 </span>
               </a>
               <ul class="treeview-menu">
                 <li><a href="#">
-                  <i class="fa fa-file-text-o"></i><span>Add Expense</span>
+                  <i class="fa fa-file-text-o"></i><span>Add PR</span>
                   </a>
                 </li>
                 <li class="treeview">
                   <a href="#">
-                    <i class="fa fa-file-text-o"></i><span>Expense Request</span>
+                    <i class="fa fa-file-text-o"></i><span>PR Request</span>
                     <span class="pull-right-container">
                       <span class="label label-warning pull-right">
                         @php
@@ -767,6 +755,15 @@
             </span>
           </a>
         </li>
+
+        <li class="treeview">
+          <a href="{{ url('approval-advance') }}">
+            <i class="fa fa-check-square-o"></i><span>Approval Advance</span>
+            <span class="pull-right-container">
+              <span class="label label-warning pull-right"></span>
+            </span>
+          </a>
+        </li>
         
         <li class="treeview">
           <a href="#">
@@ -832,7 +829,19 @@
                   <a href="{{ url('spd-request') }}">
                     <i class="fa fa-file-text-o"></i><span>SPD Request</span>
                     <span class="pull-right-container">
-                      <span class="label label-warning pull-right">1</span>
+                      <span class="label label-warning pull-right">
+                        @php
+                            $spdRequestCount = \App\SPD::query()
+                              ->whereHas('employee', function ($query) {
+                                  return $query->where('karyawan.spd_report_to', \Auth::user()->user_login->id);
+                              })
+                              ->whereHas('spdApproval', function ($query) {
+                                  return $query->where('spd_approvals.status', 0);
+                              })
+                              ->count();
+                         @endphp
+                         {{$spdRequestCount}}
+                      </span>
                     </span>
                   </a>
                 </li>
@@ -990,6 +999,16 @@
                 </span>
               </a>
           </li>
+
+          <li class="treeview">
+            <a href="{{url('list-advance')}}">
+                <i class="fa fa-check-square-o"></i> <span>Advance Payment</span>
+                <span class="pull-right-container">
+                  <span class="label label-warning pull-right"><?php echo navigation::countListPayment()?></span>
+                </span>
+              </a>
+          </li>
+
           <li class="treeview">
             <a href="{{ url('ganti-password-finance') }}/{{Auth::user()->id}}">
               <i class="fa fa-lock"></i> <span>Change Password</span>

@@ -3,13 +3,13 @@
 @section('content')
 <!-- Content Header (Page header) -->
     <section class="content-header">
-      {{-- <span class="fonts header-style">
-        <b>SPD Submission Form (Official Travel Letter)</b>
-    </span> --}}
+      <span class="fonts header-style">
+        <b>CASH ADVANCE REQUEST APPROVAL</b>
+    </span>
     <br>
       <ol class="breadcrumb">
-        <li><a href="{{url('pengajuan-advance')}}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
-      <li class="active"><a href="#">Cash Advance</a></li>
+      <li><a href="{{url('')}}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+      <li class="active"><a href="{{url('history-spd')}}">SPD History</a></li>
       </ol>
     </section>
 
@@ -19,16 +19,6 @@
       <!-- Default box -->
       <div class="box">
         <div class="box-body">
-          
-
-
-          {{--  sub menu  --}}
-          <div style="margin-bottom: 20px">
-               <a href="pengajuan-expense" class="btn btn-warning">Expense Report</a>
-          </div>
-          {{--  end of sub menu  --}}
-
-            {{--  table data of car  --}}
             <div class="table-responsive">
                 <table id="data-table" class="table table-striped table-bordered" cellspacing="0" width="100%" style="white-space: nowrap !important;">
                     <thead>
@@ -42,36 +32,54 @@
                             <th>Purpose</th>
                             <th>Balance Received</th>
                             <th>Item File</th>
-                            <th>Status of Request</th>
-                            <th>Action</th>
+                            <th>Status Of Request</th>
+                            <th>Action</th>                            
                         </tr>
                     </thead>
-                    </thead>
                     <tbody>
-                   
+                    @foreach($data as $d)
+                      @php
+                        $balanceReceived = 'Rp. '.number_format($d->balance_received, 0, ',', '.');
+                      @endphp
                         <tr>
-                            <td>1</td>
-                            <td>RII-FINANCE-ADV-001</td>
-                            <td>7 Juli 2023</td>
-                            <td>Hafizd Muhammad</td>
-                            <td>HO20220621</td>
-                            <td>IT Specialist</td>
-                            <td>Perbaikan Laptop</td>
-                            <td>Rp. 500.000</td>
-                            <td> 
-                              <a href="#" target="_blank" class="btn btn-default btn-xs" style="color: dodgerblue;">View file</a>
+                            <td>{{$loop->iteration}}</td>
+                            <td>{{$d->no_advance}}</td>
+                            <td>{{$d->request_date}}</td>
+                            <td>{{$d->employee->nama}}</td>
+                            <td>{{$d->employee->nik}}</td>
+                            <td>{{$d->employee->jabatan->jenis_jabatan}}</td>
+                            <td>{{$d->allocation}}</td>
+                            <td>{{$balanceReceived}}</td>
+                            <td>
+                              <a href="/uploads/CashAdvance/itemfile/{{$d->item_file}}" target="_blank" class="btn btn-default btn-xs" style="color: dodgerblue;">View file</a>
                             </td>
                             <td>
-                              <span class="label label-warning">Request Process</span>
+                              @if ($d->status == 0 || $d->status == 2)
+                                <span class="label label-warning">Request Process</span>
+                              @elseif ($d->status == 1 || $d->status == 3)
+                                <span class="label label-danger">Rejected</span>
+                              @elseif ($d->status == 4)
+                                <span class="label label-warning">Payment Process</span>
+                              @elseif ($d->status == 5)
+                                <span class="label label-success">Payment Clear</span>
+                              @endif
                             </td>
                             <td>
                               <a href="#" class="btn btn-primary btn-xs"><span class='glyphicon glyphicon-print'></span></a>  
-                              <a href="#" class="btn btn-warning btn-xs"><span class='glyphicon glyphicon-pencil'></span></a>  
-                            </td>                       
+                              <a href="{{route('edit_advance_approval',$d->id)}}" class="btn btn-warning btn-xs"><span class='glyphicon glyphicon-pencil'></span></a> 
+                            </td>
+                            
+                            {{-- <td>
+                                @if($d->idr == '')
+                                    <span> </span>
+                                @else 
+                                    @rupiah($d->idr),00
+                                    <!--{{$d->idr}}-->
+                                @endif
+                            </td> --}}
                         </tr>
-                        
+                        @endforeach
                     </tbody>
-
                 </table>
             </div>
             {{--  end of car data  --}}
@@ -83,26 +91,14 @@
       <!-- /.box -->
 
     </section>
-    <!-- /.content -->
-    <!-- modal konfirmasi -->
+@endsection
 
-    <div class="modal fade" id="modal-konfirmasi" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-          <h4 class="modal-title" id="myModalLabel">Confirmation</h4>
-        </div>
-        <div class="modal-body" id="konfirmasi-body"></div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-danger" data-id="" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Deleting..." id="confirm-delete">Delete</button>
-        </div>
-        </div>
-      </div>
-    </div>
-    <!-- end of modal konfirmais -->
+@push('script')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
 
-
-    @endsection
-
+<script>
+$(function(){
+   $('#data-table').DataTable();
+});
+</script>
+@endpush

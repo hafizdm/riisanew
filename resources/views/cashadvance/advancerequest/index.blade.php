@@ -48,27 +48,39 @@
                     </thead>
                     </thead>
                     <tbody>
-                   
+                      @foreach ($data as $d)
+                      @php
+                        $balanceReceived = 'Rp. '.number_format($d->balance_received, 0, ',', '.');
+                      @endphp
                         <tr>
-                            <td>1</td>
-                            <td>RII-FINANCE-ADV-001</td>
-                            <td>7 Juli 2023</td>
-                            <td>Hafizd Muhammad</td>
-                            <td>HO20220621</td>
-                            <td>IT Specialist</td>
-                            <td>Perbaikan Laptop</td>
-                            <td>Rp. 500.000</td>
+                            <td>{{$loop->iteration}}</td>
+                            <td>{{$d->no_advance}}</td>
+                            <td>{{$d->request_date}}</td>
+                            <td>{{$d->employee->nama}}</td>
+                            <td>{{$d->employee->nik}}</td>
+                            <td>{{$d->employee->jabatan->jenis_jabatan}}</td>
+                            <td>{{$d->allocation}}</td>
+                            <td>{{$balanceReceived}}</td>
                             <td> 
-                              <a href="#" target="_blank" class="btn btn-default btn-xs" style="color: dodgerblue;">View file</a>
+                              <a href="/uploads/CashAdvance/itemfile/{{$d->item_file}}" target="_blank" class="btn btn-default btn-xs" style="color: dodgerblue;">View file</a>
                             </td>
                             <td>
-                              <span class="label label-warning">Request Process</span>
+                              @if ($d->status == 0 || $d->status == 2)
+                                <span class="label label-warning">Request Process</span>
+                              @elseif ($d->status == 1 || $d->status == 3)
+                                <span class="label label-danger">Rejected</span>
+                              @elseif ($d->status == 4)
+                                <span class="label label-warning">Payment Process</span>
+                              @elseif ($d->status == 5)
+                                <span class="label label-success">Payment Clear</span>
+                              @endif
                             </td>
                             <td>
                               <a href="#" class="btn btn-primary btn-xs"><span class='glyphicon glyphicon-print'></span></a>  
-                              <a href="#" class="btn btn-warning btn-xs"><span class='glyphicon glyphicon-pencil'></span></a>  
+                              <a href="{{route('edit_advance_request',$d->id)}}" class="btn btn-warning btn-xs"><span class='glyphicon glyphicon-pencil'></span></a>  
                             </td>                       
                         </tr>
+                      @endforeach
                         
                     </tbody>
 

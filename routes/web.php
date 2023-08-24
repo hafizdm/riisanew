@@ -339,8 +339,10 @@ Route::group(['namespace' => 'Finance', 'middleware' => 'auth.finance'], functio
 
 		// List Pengajuan Cash Advance
 		Route::get('list-advance','CashAdvanceController@index');
+		Route::get('upload-file-payment/{id}','CashAdvanceController@uploadAdvance')->name('upload-payment');
+		Route::patch('upload-file-payment/{id}','CashAdvanceController@updateAdvanceUpload')->name('update-payment-upload');
 
-
+		
 		// Reset Password
 		Route::get('ganti-password-finance/{id}','ResetPasswordController@edit')->name('editpassword-finance');
 		Route::patch('ganti-password-finance/{id}','ResetPasswordController@update')->name('updatepassword-finance');
@@ -738,12 +740,22 @@ Route::group(['namespace' => 'Finance', 'middleware' => 'auth.finance'], functio
 		Route::get('pengajuan-advance','CashAdvanceController@index');
 		Route::get('pengajuan-advance/create','CashAdvanceController@create');
 		Route::post('pengajuan-advance/store','CashAdvanceController@store')->name('store_pengajuan_advance');
+		Route::get('pengajuan-advance/{id}','CashAdvanceController@edit')->name('edit_advance');
+		Route::patch('pengajuan-advance/{id}','CashAdvanceController@update')->name('update_advance');
+		Route::post('pengajuan-advance/{id}','CashAdvanceController@destroy')->name('destroy_advance');
 
 		//request pengajuan advance
 		Route::get('advance-request','CashAdvanceController@indexRequest');
+		Route::get('advance-request/{id}','CashAdvanceController@editRequest')->name('edit_advance_request');
+		Route::get('advance-request/{id}/approve','CashAdvanceController@userApproved');
+		Route::get('advance-request/{id}/reject','CashAdvanceController@userRejected');
 
 		//approval CO Cash Advance
-		Route::get('approval-advance','CashAdvanceController@indexApproval');
+		Route::get('approval-advance','CashAdvanceController@indexDirector');
+		Route::get('approval-advance/{id}','CashAdvanceController@editDirector')->name('edit_advance_approval');
+		Route::get('advance-approval/{id}/approve','CashAdvanceController@directorApproved');
+		Route::get('advance-approval/{id}/reject','CashAdvanceController@directorRejected');
+
 
 
 		//pengajuan Expense report

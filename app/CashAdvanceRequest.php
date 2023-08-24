@@ -14,4 +14,9 @@ class CashAdvanceRequest extends Model
     public function employee(){
         return $this->belongsTo('App\Employee', 'karyawan_id' );
     }
+
+    public function cashAdvanceRequestItems()
+    {
+        return $this->hasMany('App\CashAdvanceRequestItem');
+    }
 }

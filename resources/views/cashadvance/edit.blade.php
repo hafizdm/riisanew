@@ -29,17 +29,17 @@
             <div class="col-xs-12 col-xl-6 col-lg-6">
               <div class="form-group">
                 <label for="nama">Name*</label>
-                <input type="text" class="form-control" id="nama" name="nama" value="{{Auth::user()->user_login->nama}}" placeholder="" readonly >
+                <input type="text" class="form-control" id="nama" name="nama" value="{{$cash_advance_request->employee->nama}}" placeholder="" readonly >
               </div>
 
               <div class="form-group">
                 <label for="nama">Nik*</label>
-                <input type="text" class="form-control" id="nama" name="nama" value="{{Auth::user()->user_login->nik}}" placeholder="" readonly >
+                <input type="text" class="form-control" id="nama" name="nama" value="{{$cash_advance_request->employee->nik}}" placeholder="" readonly >
               </div>
 
               <div class="form-group">
                 <label for="request_date">Date Request*</label>
-                <input type="date" data-date-format="yyyy/mm/dd" class="form-control" id="request_date" name="request_date"  placeholder="yyyy/mm/dd"  value="" required >
+                <input type="date" data-date-format="yyyy/mm/dd" class="form-control" id="request_date" name="request_date"  placeholder="yyyy/mm/dd"  value="{{ $cash_advance_request->request_date }}" required >
               </div>
             </div>
 
@@ -47,17 +47,17 @@
             <div class="col-xs-12 col-xl-6 col-lg-6">
               <div class="form-group">
                 <label for="nama">Divisi*</label>
-                <input type="text" class="form-control" id="nama" name="nama" value="{{Auth::user()->user_login->divisi_id != 0 ? Auth::user()->user_login->divisi->nama : '-'}}" placeholder="" readonly >
+                <input type="text" class="form-control" id="nama" name="nama" value="{{$cash_advance_request->employee->divisi->nama}}" placeholder="" readonly >
               </div>
 
               <div class="form-group">
                 <label for="nama">Position*</label>
-                <input type="text" class="form-control" id="nama" name="nama" value="{{Auth::user()->user_login->divisi_id != 0 ? Auth::user()->user_login->jabatan->jenis_jabatan : '-'}}" placeholder="" readonly >
+                <input type="text" class="form-control" id="nama" name="nama" value="{{$cash_advance_request->employee->jabatan->jenis_jabatan}}" placeholder="" readonly >
               </div>
 
               <div class="form-group">
                 <label for="remarks">Remarks*</label>
-                <input type="text" class="form-control" id="remarks" name="remarks" value="" placeholder=""  >
+                <input type="text" class="form-control" id="remarks" name="remarks" value="{{ $cash_advance_request->remarks}}" placeholder=""  >
               </div>
             </div>
           </div>
@@ -91,17 +91,17 @@
           <div class="col-xs-12 col-xl-6 col-lg-6">
             <div class="form-group">
               <label>Allocation*</label>
-              <input type="text" name="allocation" class="form-control">
+              <input type="text" name="allocation" value="{{$cash_advance_request->allocation}}" class="form-control">
             </div>
 
             <div class="form-group">
               <label>Reason</label>
-              <textarea name="reason" rows="4" cols="50" class="form-control" required></textarea>
+              <textarea name="reason" rows="4" cols="50" class="form-control" required>{{$cash_advance_request->reason}}</textarea>
             </div>
 
             <div class="form-group upload_report_wrapper">
               <label>Item File*</label>
-              <input type="file" name="item_file" class="form-control" required/>
+              <input type="file" name="item_file" class="form-control" />
             </div>
 
             <button type="submit" class="btn btn-primary">Save</button>
@@ -126,24 +126,35 @@
     }
 
     var id = 0;
-    function addRow() {
+    function addRow(data = null) {
+     
+      if (data == null) {
+        data = {
+          description: '',
+          estimate_unit_price: 0,
+          qty: 1,
+          total: 0
+        };
+      }
+      
+
       id++;
 
       const templateString = `
         <div class="row item-row item-row-${id}">
           <div class="col-xs-6 col-lg-2">
             <label>Description</label>
-            <input type="text" name="items[${id}][description]" class="description form-control">
+            <input type="text" name="items[${id}][description]" class="description form-control" value="${data.description}">
           </div>
 
           <div class="col-xs-6 col-lg-2">
             <label>Estimate Unite Price</label>
-            <input type="number" name="items[${id}][unit_price]" class="unit_price form-control" value="0">
+            <input type="number" name="items[${id}][unit_price]" class="unit_price form-control" value="${data.estimate_unit_price}">
           </div>
 
           <div class="col-xs-6 col-lg-2">
             <label>Quantity</label>
-            <input type="number" name="items[${id}][qty]" class="qty form-control" value="1">
+            <input type="number" name="items[${id}][qty]" class="qty form-control" value="${data.qty}">
           </div>
 
           <div class="col-xs-6 col-lg-2">
@@ -169,6 +180,7 @@
       const items = $('.control-group > .items > .item-row');
 
       // loop through item using javascript
+      
       items.each(function(index, item) {
         const unitPrice = $(item).find('.unit_price');
         const qty = $(item).find('.qty');
@@ -191,8 +203,10 @@
           $(total).val(totalVal);
           recalculateBalanceReceived();
         });
-      });
 
+        
+        $(qty).trigger('change')
+      });
     }
 
     $(document).ready(function() {
@@ -207,8 +221,14 @@
         recalculate();
       });
 
-      // Add first row on first load
-      addRow();
+      // Add rows on first load
+      const dataItems = {!! json_encode($cash_advance_request->cashAdvanceRequestItems) !!};
+      dataItems.forEach(function(item) {
+        
+        addRow(item);
+      });
+
+      setTimeout(recalculate, 500)
     });
   </script>
 @endsection

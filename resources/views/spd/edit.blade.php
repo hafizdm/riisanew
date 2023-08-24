@@ -265,12 +265,12 @@ $('#idr').on('change', function () {
 });
  
 
-$('.approved_spd').click(function(){
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
+    $('.approved_spd').click(function(){
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
 
         $.ajax({
             url: "/spd/{{$spd->id}}/approve",

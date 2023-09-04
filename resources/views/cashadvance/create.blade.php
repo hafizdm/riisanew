@@ -1,10 +1,7 @@
 @extends('templates.header')
 
 @section('content')
-  <head>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-  </head>
+
 
   <section class="content-header">
     <br>
@@ -115,6 +112,10 @@
   <!-- fungsi javascript untuk menampilkan form dinamis  -->
   <!-- penjelasan :
   saat tombol add-more ditekan, maka akan memunculkan div dengan class copy -->
+  
+@endsection
+
+@push('script')
   <script type="text/javascript">
     function recalculateBalanceReceived() {
       let sum = 0;
@@ -211,4 +212,6 @@
       addRow();
     });
   </script>
-@endsection
+@endpush
+
+

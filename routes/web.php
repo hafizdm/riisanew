@@ -339,8 +339,18 @@ Route::group(['namespace' => 'Finance', 'middleware' => 'auth.finance'], functio
 
 		// List Pengajuan Cash Advance
 		Route::get('list-advance','CashAdvanceController@index');
+		Route::get('list-advance/{id}','CashAdvanceController@editPayment')->name('edit_payment_request');
+		Route::get('list-advance/{id}/approve','CashAdvanceController@paymentSlip');
 		Route::get('upload-file-payment/{id}','CashAdvanceController@uploadAdvance')->name('upload-payment');
 		Route::patch('upload-file-payment/{id}','CashAdvanceController@updateAdvanceUpload')->name('update-payment-upload');
+
+		//List Pengajuan Expense Request
+		Route::get('list-expense','CashAdvanceController@indexExpense');
+		Route::get('list-expense/{id}','CashAdvanceController@editExpense')->name('edit_expense_request');
+		Route::get('list-expense/{id}/approve','CashAdvanceController@expenseClear');
+		Route::get('upload-file-expense/{id}','CashAdvanceController@uploadExpense')->name('upload-expense');
+		Route::patch('upload-file-expense/{id}','CashAdvanceController@updateExpenseUpload')->name('update-expense-upload');
+
 
 		
 		// Reset Password
@@ -760,9 +770,23 @@ Route::group(['namespace' => 'Finance', 'middleware' => 'auth.finance'], functio
 
 		//pengajuan Expense report
 		Route::get('pengajuan-expense','CashAdvanceController@indexExpense');
+		Route::get('pengajuan-expense/create','CashAdvanceController@createExpense');
+		Route::post('pengajuan-expense/store','CashAdvanceController@storeExpense')->name('store_pengajuan_expense');
+		Route::get('pengajuan-expense/{id}','CashAdvanceController@editExpense')->name('edit_expense');
+		Route::patch('pengajuan-expense/{id}','CashAdvanceController@updateExpense')->name('update_expense');
+		Route::post('pengajuan-expense/{id}','CashAdvanceController@destroyExpense')->name('destroy_expense');
 
-		
+		//request pengajuan expense
+		Route::get('expense-request','CashAdvanceController@indexExpenseRequest');
+		Route::get('expense-request/{id}','CashAdvanceController@editExpenseRequest')->name('edit_expense_request');
+		Route::get('expense-request/{id}/approve','CashAdvanceController@userApprovedExpense');
+		Route::get('expense-request/{id}/reject','CashAdvanceController@userRejectedExpense');
 
+		//approval CO Expense Report
+		Route::get('approval-expense','CashAdvanceController@indexExpenseDirector');
+		Route::get('approval-expense/{id}','CashAdvanceController@editExpenseDirector')->name('edit_expense_approval');
+		Route::get('approval-expense/{id}/approve','CashAdvanceController@directorApprovedExpense');
+		Route::get('approval-expense/{id}/reject','CashAdvanceController@directorRejectedExpense');
 	});
 
 });

@@ -24,7 +24,7 @@
 
           {{--  sub menu  --}}
           <div style="margin-bottom: 20px">
-               <a href="pengajuan-expense" class="btn btn-warning">Expense Report</a>
+               <a href="expense-request" class="btn btn-warning">Expense Report</a>
           </div>
           {{--  end of sub menu  --}}
 

@@ -1,4 +1,7 @@
 @extends('templates.header')
+@php
+ $isEnabled = $cash_advance_request->status == 0;   
+@endphp
 
 @section('content')
   <head>
@@ -10,20 +13,21 @@
     <br>
 
     <ol class="breadcrumb">
-      <li><a href="{{url('pengajuan-advance')}}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+      <li><a href="#"><i class="fa fa-dashboard"></i> Dashboard</a></li>
       <li class="active"><a href="#">Cash Advance</a></li>
     </ol>
   </section>
 
   <div class="modal-header">
-    <h2 class="modal-title" id="exampleModalLabel"><b>Cash Advance Request </b></h2>
+    <h2 class="modal-title" id="exampleModalLabel"><b>Edit Cash Advance</b></h2>
   </div>
 
   <section class="content">
     <div class="box">
       <div class="box-body">
         <div id="notif"></div>
-        <form action="{{ route('store_pengajuan_advance') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('update_advance', $cash_advance_request->id) }}" method="POST" enctype="multipart/form-data">
+          @method('PATCH')
           @csrf
           <div class="row">
             <div class="col-xs-12 col-xl-6 col-lg-6">
@@ -57,7 +61,7 @@
 
               <div class="form-group">
                 <label for="remarks">Remarks*</label>
-                <input type="text" class="form-control" id="remarks" name="remarks" value="{{ $cash_advance_request->remarks}}" placeholder=""  >
+                <input type="text" class="form-control" id="remarks" name="remarks"  {{ $isEnabled ? '' : 'disabled' }}  value="{{ $cash_advance_request->remarks}}" placeholder=""  >
               </div>
             </div>
           </div>
@@ -91,17 +95,17 @@
           <div class="col-xs-12 col-xl-6 col-lg-6">
             <div class="form-group">
               <label>Allocation*</label>
-              <input type="text" name="allocation" value="{{$cash_advance_request->allocation}}" class="form-control">
+              <input type="text" name="allocation" value="{{$cash_advance_request->allocation}}" {{ $isEnabled ? '' : 'disabled' }} class="form-control">
             </div>
 
             <div class="form-group">
               <label>Reason</label>
-              <textarea name="reason" rows="4" cols="50" class="form-control" required>{{$cash_advance_request->reason}}</textarea>
+              <textarea name="reason" rows="4" cols="50" {{ $isEnabled ? '' : 'disabled' }} class="form-control" required>{{$cash_advance_request->reason}}</textarea>
             </div>
 
             <div class="form-group upload_report_wrapper">
               <label>Item File*</label>
-              <input type="file" name="item_file" class="form-control" />
+              <input type="file" name="item_file" {{ $isEnabled ? '' : 'disabled' }} class="form-control" />
             </div>
 
             <button type="submit" class="btn btn-primary">Save</button>
@@ -130,6 +134,7 @@
      
       if (data == null) {
         data = {
+          id: '',
           description: '',
           estimate_unit_price: 0,
           qty: 1,
@@ -142,19 +147,20 @@
 
       const templateString = `
         <div class="row item-row item-row-${id}">
+          <input type="hidden" name="items[${id}][id]" value="${data.id}" />
           <div class="col-xs-6 col-lg-2">
             <label>Description</label>
-            <input type="text" name="items[${id}][description]" class="description form-control" value="${data.description}">
+            <input type="text" name="items[${id}][description]" {{ $isEnabled ? '' : 'disabled' }} class="description form-control" value="${data.description}">
           </div>
 
           <div class="col-xs-6 col-lg-2">
             <label>Estimate Unite Price</label>
-            <input type="number" name="items[${id}][unit_price]" class="unit_price form-control" value="${data.estimate_unit_price}">
+            <input type="number" name="items[${id}][unit_price]" {{ $isEnabled ? '' : 'disabled' }} class="unit_price form-control" value="${data.estimate_unit_price}">
           </div>
 
           <div class="col-xs-6 col-lg-2">
             <label>Quantity</label>
-            <input type="number" name="items[${id}][qty]" class="qty form-control" value="${data.qty}">
+            <input type="number" name="items[${id}][qty]" {{ $isEnabled ? '' : 'disabled' }} class="qty form-control" value="${data.qty}">
           </div>
 
           <div class="col-xs-6 col-lg-2">
@@ -224,7 +230,6 @@
       // Add rows on first load
       const dataItems = {!! json_encode($cash_advance_request->cashAdvanceRequestItems) !!};
       dataItems.forEach(function(item) {
-        
         addRow(item);
       });
 

@@ -242,7 +242,7 @@
             });
 
             $.ajax({
-                url: "/cashadvance/{{$cash_advance_request->id}}/approve",
+                url: "/advance-request/{{$cash_advance_request->id}}/approve",
                 type: 'GET',
                 success: function(data) {
                     window.location.href = '/advance-request';
@@ -258,7 +258,7 @@
             });
 
             $.ajax({
-                url: "/cashadvance/{{$cash_advance_request->id}}/reject",
+                url: "/advance-request/{{$cash_advance_request->id}}/reject",
                 type: 'GET',
                 success: function(data) {
                     window.location.href = '/advance-request';

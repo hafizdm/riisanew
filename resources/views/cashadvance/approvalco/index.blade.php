@@ -9,7 +9,7 @@
     <br>
       <ol class="breadcrumb">
       <li><a href="{{url('')}}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
-      <li class="active"><a href="{{url('history-spd')}}">SPD History</a></li>
+      <li class="active"><a href="#">Cash Advance</a></li>
       </ol>
     </section>
 
@@ -19,6 +19,9 @@
       <!-- Default box -->
       <div class="box">
         <div class="box-body">
+          <div style="margin-bottom: 20px">
+            <a href="approval-expense" class="btn btn-warning">Expense Report</a>
+          </div>
             <div class="table-responsive">
                 <table id="data-table" class="table table-striped table-bordered" cellspacing="0" width="100%" style="white-space: nowrap !important;">
                     <thead>
@@ -37,10 +40,10 @@
                         </tr>
                     </thead>
                     <tbody>
-                    @foreach($data as $d)
-                      @php
-                        $balanceReceived = 'Rp. '.number_format($d->balance_received, 0, ',', '.');
-                      @endphp
+                        @foreach ($cashAdvance as $d)
+                        @php
+                          $balanceReceived = 'Rp. '.number_format($d->balance_received, 0, ',', '.');
+                        @endphp
                         <tr>
                             <td>{{$loop->iteration}}</td>
                             <td>{{$d->no_advance}}</td>
@@ -50,7 +53,7 @@
                             <td>{{$d->employee->jabatan->jenis_jabatan}}</td>
                             <td>{{$d->allocation}}</td>
                             <td>{{$balanceReceived}}</td>
-                            <td>
+                            <td> 
                               <a href="/uploads/CashAdvance/itemfile/{{$d->item_file}}" target="_blank" class="btn btn-default btn-xs" style="color: dodgerblue;">View file</a>
                             </td>
                             <td>
@@ -66,17 +69,8 @@
                             </td>
                             <td>
                               <a href="#" class="btn btn-primary btn-xs"><span class='glyphicon glyphicon-print'></span></a>  
-                              <a href="{{route('edit_advance_approval',$d->id)}}" class="btn btn-warning btn-xs"><span class='glyphicon glyphicon-pencil'></span></a> 
-                            </td>
-                            
-                            {{-- <td>
-                                @if($d->idr == '')
-                                    <span> </span>
-                                @else 
-                                    @rupiah($d->idr),00
-                                    <!--{{$d->idr}}-->
-                                @endif
-                            </td> --}}
+                              <a href="{{route('edit_advance_approval',$d->id)}}" class="btn btn-warning btn-xs"><span class='glyphicon glyphicon-pencil'></span></a>  
+                            </td>       
                         </tr>
                         @endforeach
                     </tbody>
@@ -90,7 +84,7 @@
       </div>
       <!-- /.box -->
 
-    </section>
+    </section>  
 @endsection
 
 @push('script')

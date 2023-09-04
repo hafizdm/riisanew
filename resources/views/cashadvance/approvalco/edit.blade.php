@@ -39,7 +39,7 @@
 
               <div class="form-group">
                 <label for="request_date">Date Request*</label>
-                <input type="date" data-date-format="yyyy/mm/dd" class="form-control" id="request_date" name="request_date"  placeholder="yyyy/mm/dd"  value="{{ $cash_advance_request->request_date }}" required >
+                <input type="date" data-date-format="yyyy/mm/dd" class="form-control" id="request_date" name="request_date"  placeholder="yyyy/mm/dd"  value="{{ $cash_advance_request->request_date }}" readonly>
               </div>
             </div>
 
@@ -57,7 +57,7 @@
 
               <div class="form-group">
                 <label for="remarks">Remarks*</label>
-                <input type="text" class="form-control" id="remarks" name="remarks" value="{{ $cash_advance_request->remarks}}" placeholder=""  >
+                <input type="text" class="form-control" id="remarks" name="remarks" value="{{ $cash_advance_request->remarks}}" placeholder="" readonly >
               </div>
             </div>
           </div>
@@ -91,12 +91,12 @@
           <div class="col-xs-12 col-xl-6 col-lg-6">
             <div class="form-group">
               <label>Allocation*</label>
-              <input type="text" name="allocation" value="{{$cash_advance_request->allocation}}" class="form-control">
+              <input type="text" name="allocation" value="{{$cash_advance_request->allocation}}" class="form-control" readonly>
             </div>
 
             <div class="form-group">
               <label>Reason</label>
-              <textarea name="reason" rows="4" cols="50" class="form-control" required>{{$cash_advance_request->reason}}</textarea>
+              <textarea name="reason" rows="4" cols="50" class="form-control" readonly>{{$cash_advance_request->reason}}</textarea>
             </div>
 
             <div class="form-group upload_report_wrapper">
@@ -153,17 +153,17 @@
         <div class="row item-row item-row-${id}">
           <div class="col-xs-6 col-lg-2">
             <label>Description</label>
-            <input type="text" name="items[${id}][description]" class="description form-control" value="${data.description}">
+            <input type="text" name="items[${id}][description]" class="description form-control" value="${data.description}" readonly>
           </div>
 
           <div class="col-xs-6 col-lg-2">
             <label>Estimate Unite Price</label>
-            <input type="number" name="items[${id}][unit_price]" class="unit_price form-control" value="${data.estimate_unit_price}">
+            <input type="number" name="items[${id}][unit_price]" class="unit_price form-control" value="${data.estimate_unit_price}" readonly>
           </div>
 
           <div class="col-xs-6 col-lg-2">
             <label>Quantity</label>
-            <input type="number" name="items[${id}][qty]" class="qty form-control" value="${data.qty}">
+            <input type="number" name="items[${id}][qty]" class="qty form-control" value="${data.qty}" readonly>
           </div>
 
           <div class="col-xs-6 col-lg-2">
@@ -245,7 +245,7 @@
             });
 
             $.ajax({
-                url: "/cashadvance/{{$cash_advance_request->id}}/approve",
+                url: "/advance-approval/{{$cash_advance_request->id}}/approve",
                 type: 'GET',
                 success: function(data) {
                     window.location.href = '/approval-advance';
@@ -261,7 +261,7 @@
             });
 
             $.ajax({
-                url: "/cashadvance/{{$cash_advance_request->id}}/reject",
+                url: "/advance-approval/{{$cash_advance_request->id}}/reject",
                 type: 'GET',
                 success: function(data) {
                     window.location.href = '/approval-advance';

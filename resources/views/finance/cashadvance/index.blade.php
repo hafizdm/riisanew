@@ -19,6 +19,9 @@
       <!-- Default box -->
       <div class="box">
         <div class="box-body">
+          <div style="margin-bottom: 20px">
+            <a href="list-expense" class="btn btn-warning">Expense Report</a>
+          </div>
             <div class="table-responsive">
                 <table id="data-table" class="table table-striped table-bordered" cellspacing="0" width="100%" style="white-space: nowrap !important;">
                     <thead>
@@ -74,7 +77,7 @@
                             </td>
                             <td>
                               <a href="#" class="btn btn-primary btn-xs"><span class='glyphicon glyphicon-print'></span></a>  
-                              <a href="{{route('edit_advance_request',$d->id)}}" class="btn btn-warning btn-xs"><span class='glyphicon glyphicon-pencil'></span></a> 
+                              <a href="{{route('edit_payment_request',$d->id)}}" class="btn btn-warning btn-xs"><span class='glyphicon glyphicon-pencil'></span></a> 
                             </td>
                             
                             {{-- <td>

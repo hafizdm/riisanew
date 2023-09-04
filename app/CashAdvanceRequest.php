@@ -19,4 +19,9 @@ class CashAdvanceRequest extends Model
     {
         return $this->hasMany('App\CashAdvanceRequestItem');
     }
+
+    public function expenseReports()
+    {
+        return $this->hasMany('App\ExpenseReport');
+    }
 }

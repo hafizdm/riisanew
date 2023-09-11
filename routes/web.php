@@ -346,12 +346,10 @@ Route::group(['namespace' => 'Finance', 'middleware' => 'auth.finance'], functio
 
 		//List Pengajuan Expense Request
 		Route::get('list-expense','CashAdvanceController@indexExpense');
-		Route::get('list-expense/{id}','CashAdvanceController@editExpense')->name('edit_expense_request');
+		Route::get('list-expense/{id}','CashAdvanceController@editExpense')->name('edit_expense_payment');
 		Route::get('list-expense/{id}/approve','CashAdvanceController@expenseClear');
 		Route::get('upload-file-expense/{id}','CashAdvanceController@uploadExpense')->name('upload-expense');
 		Route::patch('upload-file-expense/{id}','CashAdvanceController@updateExpenseUpload')->name('update-expense-upload');
-
-
 		
 		// Reset Password
 		Route::get('ganti-password-finance/{id}','ResetPasswordController@edit')->name('editpassword-finance');
@@ -753,6 +751,7 @@ Route::group(['namespace' => 'Finance', 'middleware' => 'auth.finance'], functio
 		Route::get('pengajuan-advance/{id}','CashAdvanceController@edit')->name('edit_advance');
 		Route::patch('pengajuan-advance/{id}','CashAdvanceController@update')->name('update_advance');
 		Route::post('pengajuan-advance/{id}','CashAdvanceController@destroy')->name('destroy_advance');
+		Route::get('pdf-advance/{id}','CashAdvanceController@pdfAdvance');
 
 		//request pengajuan advance
 		Route::get('advance-request','CashAdvanceController@indexRequest');
@@ -775,6 +774,7 @@ Route::group(['namespace' => 'Finance', 'middleware' => 'auth.finance'], functio
 		Route::get('pengajuan-expense/{id}','CashAdvanceController@editExpense')->name('edit_expense');
 		Route::patch('pengajuan-expense/{id}','CashAdvanceController@updateExpense')->name('update_expense');
 		Route::post('pengajuan-expense/{id}','CashAdvanceController@destroyExpense')->name('destroy_expense');
+		Route::get('pdf-expense/{id}','CashAdvanceController@pdfExpense');
 
 		//request pengajuan expense
 		Route::get('expense-request','CashAdvanceController@indexExpenseRequest');

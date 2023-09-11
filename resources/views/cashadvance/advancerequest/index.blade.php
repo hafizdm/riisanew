@@ -76,7 +76,7 @@
                               @endif
                             </td>
                             <td>
-                              <a href="#" class="btn btn-primary btn-xs"><span class='glyphicon glyphicon-print'></span></a>  
+                              <a href="{{url('pdf-advance',$d->id)}}" class="btn btn-primary btn-xs"><span class='glyphicon glyphicon-print'></span></a> 
                               <a href="{{route('edit_advance_request',$d->id)}}" class="btn btn-warning btn-xs"><span class='glyphicon glyphicon-pencil'></span></a>  
                             </td>                       
                         </tr>

@@ -35,6 +35,11 @@ class Employee extends Model
         return $this->belongsTo('App\TimeSheetUser','id_user');
     }
 
+    public function reportTo()
+    {
+      return $this->belongsTo('App\Employee', 'spd_report_to', 'id');
+    }
+
     // public function dataKaryawan()
     // {
     //   return $this->belongsTo('App\RequestBarang', 'updated_manager_by','nama');

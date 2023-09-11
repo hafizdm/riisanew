@@ -1,5 +1,9 @@
 @extends('templates.header')
 
+@php
+ $isEnabled = $expenseReport->status == 0;   
+@endphp
+
 @section('content')
   <section class="content-header">
     <br>
@@ -35,7 +39,7 @@
 
               <div class="form-group">
                 <label for="request_date">Date Request*</label>
-                <input type="date" data-date-format="yyyy/mm/dd" class="form-control" id="request_date" name="request_date"  placeholder="yyyy/mm/dd"  value="{{ $expenseReport->request_date }}" required>
+                <input type="date" data-date-format="yyyy/mm/dd" class="form-control" id="request_date" name="request_date"  placeholder="yyyy/mm/dd" {{ $isEnabled ? '' : 'disabled' }}  value="{{ $expenseReport->request_date }}" required>
               </div>
             </div>
 
@@ -53,7 +57,7 @@
 
               <div class="form-group">
                 <label for="remarks">Remarks*</label>
-                <input type="text" class="form-control" id="remarks" name="remarks" value="{{ $expenseReport->remarks }}" placeholder=""  >
+                <input type="text" class="form-control" id="remarks" name="remarks" {{ $isEnabled ? '' : 'disabled' }} value="{{ $expenseReport->remarks }}" placeholder=""  >
               </div>
             </div>
           </div>
@@ -111,7 +115,7 @@
 
             <div class="form-group upload_report_wrapper">
               <label>Upload Invoice*</label>
-              <input type="file" name="file_invoice" class="form-control" />
+              <input type="file" name="file_invoice" {{ $isEnabled ? '' : 'disabled' }} class="form-control" />
             </div>
 
             <button type="submit" class="btn btn-primary">Save</button>
@@ -155,17 +159,17 @@
           <input type="hidden" name="items[${id}][id]" value="${data.id}" />
           <div class="col-xs-6 col-lg-2">
             <label>Description</label>
-            <input type="text" name="items[${id}][description]" class="description form-control" value="${data.description}">
+            <input type="text" name="items[${id}][description]" class="description form-control" {{ $isEnabled ? '' : 'disabled' }} value="${data.description}">
           </div>
 
           <div class="col-xs-6 col-lg-2">
             <label>Estimate Unite Price</label>
-            <input type="number" name="items[${id}][unit_price]" class="unit_price form-control" value="${data.estimate_unit_price}">
+            <input type="number" name="items[${id}][unit_price]" class="unit_price form-control" {{ $isEnabled ? '' : 'disabled' }} value="${data.estimate_unit_price}">
           </div>
 
           <div class="col-xs-6 col-lg-2">
             <label>Quantity</label>
-            <input type="number" name="items[${id}][qty]" class="qty form-control" value="${data.qty}">
+            <input type="number" name="items[${id}][qty]" class="qty form-control" {{ $isEnabled ? '' : 'disabled' }} value="${data.qty}">
           </div>
 
           <div class="col-xs-6 col-lg-2">

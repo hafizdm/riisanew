@@ -99,11 +99,7 @@
               <textarea name="reason" rows="4" cols="50" class="form-control" readonly>{{$cash_advance_request->reason}}</textarea>
             </div>
 
-            <div class="form-group upload_report_wrapper">
-              <label>Item File*</label>
-              <input type="file" name="item_file" class="form-control" />
-            </div>
-
+        
             <div class="dropdown">
                 <button type="button" class="btn btn-secondary dropdown-toggle btn-xs" data-toggle="dropdown">
                     Action

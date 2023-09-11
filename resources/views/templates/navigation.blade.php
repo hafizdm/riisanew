@@ -757,6 +757,15 @@
         </li>
 
         <li class="treeview">
+          <a href="{{ url('advance-request') }}">
+            <i class="fa fa-check-square-o"></i><span>Advance Review</span>
+            <span class="pull-right-container">
+              <span class="label label-warning pull-right"></span>
+            </span>
+          </a>
+        </li>
+
+        <li class="treeview">
           <a href="{{ url('approval-advance') }}">
             <i class="fa fa-check-square-o"></i><span>Approval Advance</span>
             <span class="pull-right-container">

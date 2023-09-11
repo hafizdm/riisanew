@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\CashAdvance;
 
 use App\ExpenseReport;
+use \PDF;
+use App\SPD;
+use App\ExpenseReportItem;
 use App\CashAdvanceRequest;
 use Illuminate\Http\Request;
 use App\CashAdvanceRequestItem;
-use App\ExpenseReportItem;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
@@ -92,7 +94,7 @@ class CashAdvanceController extends Controller
             $data = CashAdvanceRequest::findOrFail($id);
             $data->karyawan_id = Auth::user()->user_login->id;
             $data->request_date = $request->get('request_date');
-            $data-> remarks = $request->get('remarks');
+            $data->remarks = $request->get('remarks');
             $data->allocation = $request->get('allocation');
             $data->reason = $request->get('reason');
             $data->balance_received = $request->get('balance_received');
@@ -122,7 +124,7 @@ class CashAdvanceController extends Controller
 
             return redirect('pengajuan-advance')->with('success', 'Data berhasil ditambahkan');
         } catch(\Exception $e){
-            
+            report($e);
            return redirect('pengajuan-advance')->with('failed', 'Silahkan Cek Kembali Inputan Anda');
         }
     }
@@ -239,6 +241,7 @@ class CashAdvanceController extends Controller
 
             $expenseReport->cash_advance_request_id = $cashAdvance->id;
             $expenseReport->request_date = $request->input('request_date');
+            $expenseReport->remarks = $request->get('remarks');
             $expenseReport->cash_out = $request->input('cash_out');
             $expenseReport->total_expense = $request->input('total_expense');
             $expenseReport->file_invoice = $request->input('total_expense');
@@ -400,6 +403,41 @@ class CashAdvanceController extends Controller
         $expenseReport = ExpenseReport::find($id);
         $expenseReport->status = 3;
         $expenseReport->save();  
+    }
+
+    public function pdfAdvance($id)
+    {
+        set_time_limit(300);
+        $data = CashAdvanceRequest::find($id);
+        
+        $pdf = PDF::loadview('cashadvance/cetak', compact('data'))->setPaper('a4','potrait');
+        // dd($data);  
+        $fileName = $data->request_date;
+        return $pdf->stream("Cash Advance"." ".$fileName. '.pdf');
+    }
+
+    public function pdfExpense($id)
+    {
+        set_time_limit(300);
+        $data = ExpenseReport::find($id);
+        
+        $sisaExpense = $data->cashAdvanceRequest->balance_received - $data->cash_out;
+
+        $status = 'Refund';
+
+        if ($sisaExpense == 0) {
+        $status = 'Cash Clear';
+        }
+
+        if ($sisaExpense < 0) {
+        $status = 'Reimbursable';
+        }
+
+        $pdf = PDF::loadview('expensereport/cetak', compact('data', 'sisaExpense', 'status'))->setPaper('a4','potrait');
+        // dd($data);  
+        $fileName = $data->form_date;
+        
+        return $pdf->stream("Expense Report"." ".$fileName. '.pdf');
     }
   
 }

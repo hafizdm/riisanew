@@ -92,4 +92,18 @@ class CashAdvanceController extends Controller
 
         return redirect('list-expense')->with('success', 'File successfully updated');
     }
+
+    public function editExpense($id)
+    {
+        $expenseReport = ExpenseReport::with(['expenseReportItems', 'cashAdvanceRequest'])->find($id);
+        // dd($expenseReport);
+        return view('finance/expensereport/edit', compact('expenseReport'));
+    }
+
+    public function ExpenseClear($id)
+    {
+        $data = ExpenseReport::find($id);
+        $data->status = 5;
+        $data->save();
+    }
 }

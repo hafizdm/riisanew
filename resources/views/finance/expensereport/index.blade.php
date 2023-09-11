@@ -76,7 +76,7 @@
                                
                             <td>
                                 <a href="#" class="btn btn-primary btn-xs"><span class='glyphicon glyphicon-print'></span></a>  
-                                <a href="#" class="btn btn-warning btn-xs"><span class='glyphicon glyphicon-pencil'></span></a>  
+                                <a href="{{route('edit_expense_payment',$d->id)}}" class="btn btn-warning btn-xs"><span class='glyphicon glyphicon-pencil'></span></a>  
                                 @if (in_array($d->status, [0, 1, 3]))
                                     <button class='btn btn-xs btn-danger delete' data-id="{{$d->id}}"><span class='glyphicon glyphicon-trash'></span></button></td>  
                                 @endif

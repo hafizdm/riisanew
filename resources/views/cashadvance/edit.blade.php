@@ -74,12 +74,14 @@
                 <div class="items"></div>
 
                 <div class="row">
+                  @if($cash_advance_request->status == 0)
                   <div class="col-xs-6 col-lg-2">
                     <label></label>
                     <button class="btn btn-success add-more" type="button">
                       <i class="glyphicon glyphicon-plus"></i> Add
                     </button>
                   </div>
+                  @endif
                 </div>
 
                 <div class="row">
@@ -169,10 +171,12 @@
           </div>
 
           <div class="col-xs-6 col-lg-2">
+            @if($cash_advance_request->status == 0)
             <label></label>
             <button class="btn btn-danger remove remove-${id}" type="button">
-              <i class="glyphicon glyphicon-remove"></i> Remove
+              <i class="glyphicon glyphicon-remove"></i> Remove 
             </button>
+            @endif
           </div>
         </div>
       `

@@ -191,8 +191,11 @@
       recalculate();
     }
 
-    function recalculate() {
+    function recalculate(message = 'add') {
       const items = $('.control-group > .items > .item-row');
+
+      console.log('recalculate on:',message)
+      console.log(items)
 
       // loop through item using javascript
       items.each(function(index, item) {
@@ -217,6 +220,7 @@
           $(total).val(totalVal);
           recalculateCashOut();
         });
+        recalculateCashOut();
       });
     }
 
@@ -229,7 +233,10 @@
       $("body").on("click", ".remove",function(){
         $(this).parents(".row").remove();
 
-        recalculate();
+        setTimeout(() => {
+          recalculate('delete');
+        }, 500);
+        
       });
 
       const dataItems = {!! json_encode($expenseReport->expenseReportItems) !!};

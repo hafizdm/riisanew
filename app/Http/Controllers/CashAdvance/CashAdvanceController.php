@@ -16,7 +16,7 @@ class CashAdvanceController extends Controller
 {
     public function index()
     {
-        $data = CashAdvanceRequest::query()->where('karyawan_id', Auth::user()->user_login->id)->get();
+        $data = CashAdvanceRequest::query()->where('karyawan_id', Auth::user()->user_login->id)->orderBy('id', 'desc')->get();
 
         return view('cashadvance/index', compact('data'));
     }
@@ -89,45 +89,53 @@ class CashAdvanceController extends Controller
     }
 
     public function update(Request $request, $id)
-    {
-        try{
-            $data = CashAdvanceRequest::findOrFail($id);
-            $data->karyawan_id = Auth::user()->user_login->id;
-            $data->request_date = $request->get('request_date');
-            $data->remarks = $request->get('remarks');
-            $data->allocation = $request->get('allocation');
-            $data->reason = $request->get('reason');
-            $data->balance_received = $request->get('balance_received');
+{
+    try{
+        // dd($request->all());
+        $employee = Auth::user()->user_login;
+        $cashAdvance = $employee->cashAdvanceRequests()->findOrFail($id);
+        $cashAdvance->request_date = $request->get('request_date');
+        $cashAdvance->remarks = $request->get('remarks');
+        $cashAdvance->allocation = $request->get('allocation');
+        $cashAdvance->reason = $request->get('reason');
+        $cashAdvance->balance_received = (int)$request->get('balance_received');
 
-            if (request()->hasFile('item_file')) {
-                $fileInput = request()->file('item_file');
-                $fileName = str_replace('/', '-', $data->id) . '.' . $fileInput->getClientOriginalExtension();
-                $fileInput->move('uploads/CashAdvance/itemfile', $fileName);
-          
-                $data->item_file = $fileName;
-              }
-            $data->status = 0; //waiting user approval
-            
+        if (request()->hasFile('item_file')) {
+            $fileInput = request()->file('item_file');
+            $fileName = str_replace('/', '-', $cashAdvance->id) . '.' . $fileInput->getClientOriginalExtension();
+            $fileInput->move('uploads/CashAdvance/itemfile', $fileName);
 
-            $data->save();
-    
-            foreach ($request->get('items', []) as $item) {
-                $cashAdvanceRequestItem = CashAdvanceRequestItem::firstOrNew(['id' => $item['id']]);
-
-                $cashAdvanceRequestItem->cash_advance_request_id = $data->id;
-                $cashAdvanceRequestItem->description = $item['description'];
-                $cashAdvanceRequestItem->qty = $item['qty'];
-                $cashAdvanceRequestItem->estimate_unit_price = $item['unit_price'];
-                $cashAdvanceRequestItem->save();
-            }
-
-
-            return redirect('pengajuan-advance')->with('success', 'Data berhasil ditambahkan');
-        } catch(\Exception $e){
-            report($e);
-           return redirect('pengajuan-advance')->with('failed', 'Silahkan Cek Kembali Inputan Anda');
+            $cashAdvance->item_file = $fileName;
         }
+
+        $cashAdvance->status = 0; // waiting user approval
+        $cashAdvance->save();
+
+        $cashAdvanceRequestItemIds = [];
+        foreach ($request->get('items', []) as $item) {
+            // Find or initialize new record
+            $cashAdvanceRequestItem = $cashAdvance->cashAdvanceRequestItems()
+                ->firstOrNew(['id' => $item['id']]);
+
+            $cashAdvanceRequestItem->description = $item['description'];
+            $cashAdvanceRequestItem->qty = $item['qty'];
+            $cashAdvanceRequestItem->estimate_unit_price = $item['unit_price'];
+            $cashAdvanceRequestItem->save();
+
+            $cashAdvanceRequestItemIds[] = $cashAdvanceRequestItem->id;
+        }
+
+        // Remove obsolete data
+        $cashAdvance->cashAdvanceRequestItems()
+            ->whereNotIn('id', $cashAdvanceRequestItemIds)
+            ->delete();
+
+        return redirect('pengajuan-advance')->with('success', 'Data berhasil ditambahkan');
+    } catch(\Exception $e){
+        report($e);
+        return redirect('pengajuan-advance')->with('failed', 'Silahkan Cek Kembali Inputan Anda');
     }
+}
 
     public function destroy($id)
     {
@@ -284,43 +292,51 @@ class CashAdvanceController extends Controller
 
     public function updateExpense(Request $request, $id)
     {
-        try{
-           
-            $expenseReport = ExpenseReport::findOrFail($id);
-            $cashAdvance = $expenseReport->cashAdvanceRequest;
+        try {
+            $expenseReport = ExpenseReport::query()
+                ->whereHas('cashAdvanceRequest', function ($query) {
+                    return $query->where('karyawan_id', Auth::user()->user_login->id);
+                })
+                ->findOrFail($id);
 
-            $expenseReport->cash_advance_request_id = $cashAdvance->id;
             $expenseReport->request_date = $request->input('request_date');
             $expenseReport->cash_out = $request->input('cash_out');
             $expenseReport->total_expense = $request->input('total_expense');
             $expenseReport->file_invoice = $request->input('total_expense');
+
             if (request()->hasFile('file_invoice')) {
                 $fileInput = request()->file('file_invoice');
                 $fileName = str_replace('/', '-', $expenseReport->id) . '.' . $fileInput->getClientOriginalExtension();
                 $fileInput->move('uploads/ExpenseReport/fileInvoice', $fileName);
-        
+
                 $expenseReport->file_invoice = $fileName;
             }
             $expenseReport->status = 0;
             $expenseReport->save();
 
+            $expenseReportItemIds = [];
             foreach ($request->get('items', []) as $item) {
-                // dd($item['description']);
+                // Find or initialize new record
+                $expenseReportItem = $expenseReport->expenseReportItems()
+                    ->firstOrNew(['id' => $item['id']]);
 
-                $expenseReportItem = ExpenseReportItem::firstOrNew(['id' => $item['id']]);
-
-                $expenseReportItem->expense_report_id = $expenseReport->id;
                 $expenseReportItem->description = $item['description'];
                 $expenseReportItem->qty = $item['qty'];
                 $expenseReportItem->estimate_unit_price = $item['unit_price'];
                 $expenseReportItem->save();
-            }
-            
 
-        return redirect('pengajuan-expense')->with('success', 'Data berhasil ditambahkan');
+                $expenseReportItemIds[] = $expenseReportItem->id;
+            }
+
+            // Remove obsolete data
+            $expenseReport->expenseReportItems()
+                ->whereNotIn('id', $expenseReportItemIds)
+                ->delete();
+
+            return redirect('pengajuan-expense')->with('success', 'Data berhasil ditambahkan');
         } catch(\Exception $e){
             report($e);
-           return redirect('pengajuan-expense')->with('failed', 'Silahkan Cek Kembali Inputan Anda');
+            return redirect('pengajuan-expense')->with('failed', 'Silahkan Cek Kembali Inputan Anda');
         }
     }
 

@@ -30,7 +30,7 @@
                           <th width="5%">#</th>
                           <th>Advance Number</th>
                           <th>Date Request</th>
-                          <th>Purpose</th>
+                          <th>Allocation</th>
                           <th>Balance Received</th>
                           <th>Cash Out</th>
                           <th>File Invoice</th>

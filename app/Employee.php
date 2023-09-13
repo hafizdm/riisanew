@@ -40,6 +40,12 @@ class Employee extends Model
       return $this->belongsTo('App\Employee', 'spd_report_to', 'id');
     }
 
+    public function cashAdvanceRequests()
+    {
+      return $this->hasMany('App\CashAdvanceRequest','karyawan_id');
+    }
+
+
     // public function dataKaryawan()
     // {
     //   return $this->belongsTo('App\RequestBarang', 'updated_manager_by','nama');

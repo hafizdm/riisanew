@@ -30,7 +30,7 @@
                             <th width="5%">#</th>
                             <th>Request Number</th>
                             <th>Date Request</th>
-                            <th>Purpose</th>
+                            <th>Allocation</th>
                             <th>Balance Received</th>
                             <th>Item File</th>
                             <th>Status of Request</th>

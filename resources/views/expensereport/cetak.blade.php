@@ -270,7 +270,7 @@
               <p style='margin-bottom:0in;text-align:center;
                               line-height:100%'>
                 
-                  <span style='font-size:10.0pt;line-height:100%'>{{ $data->cashAdvanceRequest->remarks}}</span>
+                  <span style='font-size:10.0pt;line-height:100%'>{{ $data->remarks}}</span>
                 
               </p>
             </td>

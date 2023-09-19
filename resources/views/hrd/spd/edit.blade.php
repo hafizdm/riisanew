@@ -180,6 +180,29 @@
                 const allowancePerDayDomestic = '{{ $spd->employee->jabatan->allowance_per_day_domestic }}';
                 const allowancePerDayInternational = '{{ $spd->employee->jabatan->allowance_per_day_international }}';
 
+                if ($('#travel_type').val() == '') {
+                    $('.eat_per_day_wrapper').hide();
+                    $('#eat_per_day').val(0);
+
+                    $('.allowance_per_day_wrapper').hide();
+                    $('#allowance_per_day').val(0);
+                }
+
+                if ($('#travel_type').val() == 'Domestic') {
+                    $('#eat_per_day').val(eatPerDayDomestic);
+                    $('.eat_per_day_wrapper').show();
+
+                    $('#allowance_per_day').val(allowancePerDayDomestic);
+                    $('.allowance_per_day_wrapper').show();
+                }
+
+                if ($('#travel_type').val() == 'International') {
+                    $('#eat_per_day').val(eatPerDayInternational);
+                    $('.eat_per_day_wrapper').show();
+
+                    $('#allowance_per_day').val(allowancePerDayInternational);
+                    $('.allowance_per_day_wrapper').show();
+                }
 
                 
 

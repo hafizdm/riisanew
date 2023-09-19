@@ -67,6 +67,8 @@
                                 <span class="label label-warning">Payment Process</span>
                               @elseif ($d->status == 5)
                                 <span class="label label-success">Payment Clear</span>
+                              @elseif ($d->status == 6)
+                                <span class="label label-danger">Payment Cancel</span>
                               @endif
                             </td>
                             <td>

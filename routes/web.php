@@ -341,6 +341,7 @@ Route::group(['namespace' => 'Finance', 'middleware' => 'auth.finance'], functio
 		Route::get('list-advance','CashAdvanceController@index');
 		Route::get('list-advance/{id}','CashAdvanceController@editPayment')->name('edit_payment_request');
 		Route::get('list-advance/{id}/approve','CashAdvanceController@paymentSlip');
+		Route::get('list-advance/{id}/reject','CashAdvanceController@paymentCancel');
 		Route::get('upload-file-payment/{id}','CashAdvanceController@uploadAdvance')->name('upload-payment');
 		Route::patch('upload-file-payment/{id}','CashAdvanceController@updateAdvanceUpload')->name('update-payment-upload');
 

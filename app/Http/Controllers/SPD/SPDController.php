@@ -9,10 +9,13 @@ use App\SpdApproval;
 use App\SpdReport;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Notifications\SpdNeedHrdApproval;
+use App\Notifications\SpdNeedRequestClear;
 use App\SpdReportApproval;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
+use Illuminate\Support\Facades\Notification;
 
 class SPDController extends Controller
 {
@@ -153,6 +156,10 @@ class SPDController extends Controller
               str_pad($spd->id, 5, '0', STR_PAD_LEFT)
             ]);
             $spd->save();
+
+            // Static receiver
+            Notification::route('mail', 'iwan.krisnawan@rapidinfrastruktur.com')
+            ->notify(new SpdNeedHrdApproval($spd));
 
             return redirect('pengajuan-spd')->with('success', 'Data berhasil ditambahkan');
         } catch(\Exception $e){
@@ -476,6 +483,8 @@ class SPDController extends Controller
 
         $spdApproval->status = 1; // status approved
         $spdApproval->save();
+
+        $spd->employee->notify(new SpdNeedRequestClear($spd));
     }
 
     public function spdRejected($id)

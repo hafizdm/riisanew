@@ -109,6 +109,7 @@
                 </button>
                 <ul class="dropdown-menu">
                     <li><a href="javascript:;" class="approved_advance"><i class="fa fa-check" aria-hidden="true" style="color:blue"></i>Payment Slip</a></li>
+                    <li><a href="javascript:;" class="rejected_advance"><i class="fa fa-ban" style="color:red" aria-hidden="true"></i>Payment Cancel</a></li>
               @endif
             </div>
 
@@ -243,6 +244,22 @@
 
             $.ajax({
                 url: "/list-advance/{{$cash_advance_request->id}}/approve",
+                type: 'GET',
+                success: function(data) {
+                    window.location.href = '/list-advance';
+                }
+            });
+        });
+
+        $('.rejected_advance').click(function(){
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                url: "/list-advance/{{$cash_advance_request->id}}/reject",
                 type: 'GET',
                 success: function(data) {
                     window.location.href = '/list-advance';

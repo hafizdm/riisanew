@@ -1,19 +1,22 @@
 <?php
 
 namespace App\Http\Controllers\Finance;
-use App\CashAdvanceRequest;
-use App\ExpenseReport;
-use App\Http\Controllers\Controller;
 use Carbon\Carbon;
+use App\ExpenseReport;
+use App\CashAdvanceRequest;
 use Illuminate\Http\Request;
-
+use App\Http\Controllers\Controller;
+use App\Notifications\CashAdvanceNeedFinancePaymentSlip;
+use App\Notifications\CashAdvanceNeedPaymentCancel;
+use App\Notifications\ExpenseNeedFinanceFinish;
 
 class CashAdvanceController extends Controller
 {
     public function index()
     {
         $data = CashAdvanceRequest::query()
-        ->whereIn('status', [4, 5]) // waiting payment slip
+        ->whereIn('status', [4, 5, 6]) // waiting payment slip
+        ->orderBy('id', 'desc')
         ->get();
         
         return view('finance/cashadvance/index', compact('data'));
@@ -56,12 +59,25 @@ class CashAdvanceController extends Controller
         $data = CashAdvanceRequest::find($id);
         $data->status = 5;
         $data->save();
+
+        $data->employee->notify(new CashAdvanceNeedFinancePaymentSlip($data));   
+    }
+
+    public function paymentCancel($id)
+    {
+        $data = CashAdvanceRequest::find($id);
+        $data->status = 6;
+        $data->save();
+
+        // Dynamic receiver
+        $data->employee->notify(new CashAdvanceNeedPaymentCancel($data));
     }
 
     public function indexExpense()
     {
         $expenseReport= ExpenseReport::query()
         ->whereIn('status', [4, 5]) // waiting payment slip
+        ->orderBy('id', 'desc')
         ->get();
         
         return view('finance/expensereport/index', compact('expenseReport'));
@@ -105,5 +121,8 @@ class CashAdvanceController extends Controller
         $data = ExpenseReport::find($id);
         $data->status = 5;
         $data->save();
+
+        // Dynamic receiver
+        $data->cashAdvanceRequest->employee->notify(new ExpenseNeedFinanceFinish ($data));
     }
 }

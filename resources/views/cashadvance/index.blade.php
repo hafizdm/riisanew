@@ -62,6 +62,8 @@
                                 <span class="label label-warning">Payment Process</span>
                                 @elseif ($d->status == 5)
                                 <span class="label label-success">Payment Clear</span>
+                                @elseif ($d->status == 6)
+                                <span class="label label-danger">Payment Cancel</span>
                                 @endif
                             </td>
                             <td>
@@ -78,6 +80,8 @@
                                     Finance (Upload Invoice)
                                     @elseif ($d->status == 5)
                                     Payment Slip
+                                    @elseif ($d->status == 6)
+                                    Payment Cancel
                                     @endif
                                 </td>
                                 <td>
@@ -90,7 +94,7 @@
                                 <td>
                                     <a href="{{url('pdf-advance',$d->id)}}" class="btn btn-primary btn-xs"><span class='glyphicon glyphicon-print'></span></a>  
                                     <a href="{{route('edit_advance',$d->id)}}" class="btn btn-warning btn-xs"><span class='glyphicon glyphicon-pencil'></span></a>  
-                                    @if (in_array($d->status, [0, 1, 3]))
+                                    @if (in_array($d->status, [0, 1, 3, 6]))
                                       <button class='btn btn-xs btn-danger delete' data-id="{{$d->id}}"><span class='glyphicon glyphicon-trash'></span></button></td>  
                                     @endif
                                   </td>           

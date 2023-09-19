@@ -445,7 +445,7 @@
                 <p style='margin-bottom:0in;text-align:center;
                         line-height:100%'>
                 <b>
-                    <span style='font-size:10.0pt;line-height:100%'>Expense Total</span>
+                    <span style='font-size:10.0pt;line-height:100%'>Expense Balance</span>
                 </b>
                 </p>
             </td>

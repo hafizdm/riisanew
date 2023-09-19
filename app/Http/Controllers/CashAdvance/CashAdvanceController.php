@@ -2,15 +2,26 @@
 
 namespace App\Http\Controllers\CashAdvance;
 
-use App\ExpenseReport;
 use \PDF;
 use App\SPD;
+use App\ExpenseReport;
 use App\ExpenseReportItem;
 use App\CashAdvanceRequest;
 use Illuminate\Http\Request;
 use App\CashAdvanceRequestItem;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\ExpenseNeedFinanceClear;
+use App\Notifications\ExpenseNeedUserApproval;
+use App\Notifications\ExpenseNeedUserRejected;
+use App\Notifications\CashAdvanceNeedUserApproval;
+use App\Notifications\CashAdvanceNeedUserRejected;
+use App\Notifications\ExpenseNeedDirectorApproval;
+use App\Notifications\ExpenseNeedDirectorRejected;
+use App\Notifications\CashAdvanceNeedFinanceApproval;
+use App\Notifications\CashAdvanceNeedDirectorApproval;
+use App\Notifications\CashAdvanceNeedDirectorRejected;
 
 class CashAdvanceController extends Controller
 {
@@ -74,6 +85,9 @@ class CashAdvanceController extends Controller
               str_pad($data->id, 5, '0', STR_PAD_LEFT)
             ]);
             $data->save();
+
+            // Dynamic receiver
+            $data->employee->reportTo->notify(new CashAdvanceNeedUserApproval($data));
 
             return redirect('pengajuan-advance')->with('success', 'Data berhasil ditambahkan');
         } catch(\Exception $e){
@@ -192,6 +206,8 @@ class CashAdvanceController extends Controller
         $data = CashAdvanceRequest::find($id);
         $data->status = 2;
         $data->save();
+        Notification::route('mail', 'adisutopo@rapidinfrastruktur.com')
+            ->notify(new CashAdvanceNeedDirectorApproval($data));
     }
 
     public function userRejected($id)
@@ -199,6 +215,9 @@ class CashAdvanceController extends Controller
         $data = CashAdvanceRequest::find($id);
         $data->status = 1;
         $data->save();
+
+        // Dynamic receiver
+        $data->employee->notify(new CashAdvanceNeedUserRejected($data));
     }
 
     public function directorApproved($id)
@@ -206,6 +225,10 @@ class CashAdvanceController extends Controller
         $data = CashAdvanceRequest::find($id);
         $data->status = 4;
         $data->save();
+        Notification::route('mail', 'grace@rapidinfrastruktur.com')
+            ->notify(new CashAdvanceNeedFinanceApproval($data));
+        Notification::route('mail', 'bintang@rapidinfrastruktur.com')
+            ->notify(new CashAdvanceNeedFinanceApproval($data));
     }
 
     public function directorRejected($id)
@@ -213,6 +236,9 @@ class CashAdvanceController extends Controller
         $data = CashAdvanceRequest::find($id);
         $data->status = 3;
         $data->save();
+
+        // Dynamic receiver
+        $data->employee->notify(new CashAdvanceNeedDirectorRejected($data));
     }
 
     //EXPENSE REPORT CONTROLLER//
@@ -223,6 +249,7 @@ class CashAdvanceController extends Controller
             ->whereHas('cashAdvanceRequest', function ($query) {
                 return $query->where('karyawan_id', Auth::user()->user_login->id);
             })
+            ->orderBy('id', 'desc')
             ->get();
 
         return view('expensereport/index', compact('expenseReports'));
@@ -274,6 +301,9 @@ class CashAdvanceController extends Controller
                 $expenseReportItem->estimate_unit_price = $item['unit_price'];
                 $expenseReportItem->save();
             }
+
+            // Dynamic receiver
+            $expenseReport->cashAdvanceRequest->employee->reportTo->notify(new ExpenseNeedUserApproval($expenseReport));
 
         return redirect('pengajuan-expense')->with('success', 'Data berhasil ditambahkan');
         } catch(\Exception $e){
@@ -398,6 +428,9 @@ class CashAdvanceController extends Controller
         $expenseReport = ExpenseReport::find($id);
         $expenseReport->status = 2;
         $expenseReport->save();
+
+        Notification::route('mail', 'adisutopo@rapidinfrastruktur.com')
+            ->notify(new ExpenseNeedDirectorApproval($expenseReport));
     }
 
     public function userRejectedExpense($id)
@@ -405,6 +438,8 @@ class CashAdvanceController extends Controller
         $expenseReport = ExpenseReport::find($id);
         $expenseReport->status = 1;
         $expenseReport->save();
+
+        $expenseReport->cashAdvanceRequest->employee->notify(new ExpenseNeedUserRejected($expenseReport));
     }
 
     public function directorApprovedExpense($id)
@@ -412,6 +447,11 @@ class CashAdvanceController extends Controller
         $expenseReport = ExpenseReport::find($id);
         $expenseReport->status = 4;
         $expenseReport->save();
+
+        Notification::route('mail', 'grace@rapidinfrastruktur.com')
+            ->notify(new ExpenseNeedFinanceClear($expenseReport));
+        Notification::route('mail', 'bintang@rapidinfrastruktur.com')
+            ->notify(new ExpenseNeedFinanceClear($expenseReport));
     }
 
     public function directorRejectedExpense($id)
@@ -419,6 +459,9 @@ class CashAdvanceController extends Controller
         $expenseReport = ExpenseReport::find($id);
         $expenseReport->status = 3;
         $expenseReport->save();  
+
+        $expenseReport->cashAdvanceRequest->employee->notify(new ExpenseNeedDirectorRejected($expenseReport));
+
     }
 
     public function pdfAdvance($id)

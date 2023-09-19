@@ -94,7 +94,7 @@
 
                 <div class="row">
                   <div class="col-xs-5 col-xl-2 col-lg-3">
-                    <label>Total Expense</label>
+                    <label>Expense Balance</label>
                     <input type="text" id="total_expense" name="total_expense" class="form-control" value="{{ $expenseReport->total_expense }}" readonly>
                   </div>
                 </div>
@@ -119,7 +119,7 @@
             </div>
 
             <button type="submit" class="btn btn-primary">Save</button>
-            <a href="{{ url('pengajuan-advance') }}" class="btn btn-danger">Cancel</a>
+            <a href="{{ url('pengajuan-expense') }}" class="btn btn-danger">Cancel</a>
           </div>
         </form>
       </div>

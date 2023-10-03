@@ -498,5 +498,10 @@ class CashAdvanceController extends Controller
         
         return $pdf->stream("Expense Report"." ".$fileName. '.pdf');
     }
+
+    public function indexPaymentRequest()
+    {
+        return view('cashadvance/indexpayment');
+    }
   
 }

@@ -337,6 +337,22 @@ Route::group(['namespace' => 'Finance', 'middleware' => 'auth.finance'], functio
 		Route::get('ubah-status-paid/edit{id}','PaidController@edit')->name('editpaid');
 		Route::patch('ubah-status-paid/update{id}','PaidController@update')->name('updatepaid');
 
+		//Payment SPD
+		Route::get('list-spd','SPDController@index');
+		Route::get('list-spd/{id}','SPDController@edit')->name('edit_payment_spd');
+		Route::get('list-spd/{id}/approve','SPDController@paymentApproved');
+		Route::get('list-spd/{id}/reject','SPDController@paymentCancel');
+		Route::get('upload-spd-finance/{id}','SPDController@uploadSpd')->name('upload_finance_spd');
+		Route::patch('upload-spd-finance/{id}','SPDController@updateSpdUpload')->name('update_finance_spd');
+
+		//Payment Report SPD
+		Route::get('list-spd-report','SPDController@indexReport');
+		Route::get('list-spd-report/{id}','SPDController@editReport')->name('edit_payment_spd_report');
+		Route::get('list-spd-report/{id}/approve','SPDController@reportApproved');
+		Route::get('upload-report-finance/{id}','SPDController@uploadReport')->name('upload_finance_report');
+		Route::patch('upload-report-finance/{id}','SPDController@updateReportUpload')->name('update_finance_report');
+
+
 		// List Pengajuan Cash Advance
 		Route::get('list-advance','CashAdvanceController@index');
 		Route::get('list-advance/{id}','CashAdvanceController@editPayment')->name('edit_payment_request');
@@ -765,6 +781,9 @@ Route::group(['namespace' => 'Finance', 'middleware' => 'auth.finance'], functio
 		Route::get('approval-advance/{id}','CashAdvanceController@editDirector')->name('edit_advance_approval');
 		Route::get('advance-approval/{id}/approve','CashAdvanceController@directorApproved');
 		Route::get('advance-approval/{id}/reject','CashAdvanceController@directorRejected');
+
+		//payment request (comingsoon)
+		Route::get('payment-request','CashAdvanceController@indexPaymentRequest');
 
 
 

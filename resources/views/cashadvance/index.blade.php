@@ -83,21 +83,21 @@
                                     @elseif ($d->status == 6)
                                     Payment Cancel
                                     @endif
-                                </td>
-                                <td>
-                                    @if($d->upload_payment != NULL || $d->upload_payment != "")
-                                        <a href="{{url('uploads/CashAdvance/'.$d->upload_payment)}}" target="_blank" class="btn btn-default btn-xs" style="color: dodgerblue;"> View File</a>
-                                        @else
+                            </td>
+                            <td>
+                                @if($d->upload_payment != NULL || $d->upload_payment != "")
+                                    <a href="{{url('uploads/CashAdvance/'.$d->upload_payment)}}" target="_blank" class="btn btn-default btn-xs" style="color: dodgerblue;"> View File</a>
+                                    @else
 
-                                        @endif
-                                </td>  
-                                <td>
-                                    <a href="{{url('pdf-advance',$d->id)}}" class="btn btn-primary btn-xs"><span class='glyphicon glyphicon-print'></span></a>  
-                                    <a href="{{route('edit_advance',$d->id)}}" class="btn btn-warning btn-xs"><span class='glyphicon glyphicon-pencil'></span></a>  
-                                    @if (in_array($d->status, [0, 1, 3, 6]))
-                                      <button class='btn btn-xs btn-danger delete' data-id="{{$d->id}}"><span class='glyphicon glyphicon-trash'></span></button></td>  
                                     @endif
-                                  </td>           
+                            </td>  
+                            <td>
+                                <a href="{{url('pdf-advance',$d->id)}}" class="btn btn-primary btn-xs"><span class='glyphicon glyphicon-print'></span></a>  
+                                <a href="{{route('edit_advance',$d->id)}}" class="btn btn-warning btn-xs"><span class='glyphicon glyphicon-pencil'></span></a>  
+                                @if (in_array($d->status, [0, 1, 3, 6]))
+                                  <button class='btn btn-xs btn-danger delete' data-id="{{$d->id}}"><span class='glyphicon glyphicon-trash'></span></button></td>  
+                                @endif
+                              </td>           
                         </tr>
                         @endforeach
                     </tbody>

@@ -179,10 +179,7 @@
                     <input type="number" id="expense_received"  name="expense_received"  value="{{$spd->spdReport->expense_received}}" class="form-control" readonly>
                 </div>
 
-                <div class="form-group upload_report_wrapper">
-                    <label for="upload_report">Upload Report*</label>
-                    <input type="file" id="upload_report" name="upload_report"   class="form-control" disabled/>                      
-                </div>
+                
 
 
                 @if($spd->spdReport && $spd->spdReport->spdReportApproval->hr_status == 0)

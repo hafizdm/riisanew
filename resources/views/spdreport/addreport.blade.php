@@ -41,9 +41,9 @@
                         <th>Total Expense</th>
                         <th>Contigensies</th>
                         <th>Upload Report</th>
-                        <th>Approval User</th>
-                        <th>Approval HC</th>
-                        <th>Upload File</th>
+                        <th>Status of Request</th> 
+                        <th>Next Process</th>
+                        <th>File Payment</th>
                         <th width="10%">Action</th>
                     </tr>
                 </thead>
@@ -72,37 +72,45 @@
                         <td>{{$cashOut}}</td>
                         <td><a href="{{url('uploads/SpdReport/report/'.$d->spdReport->upload_report)}}" target="_blank" class="btn btn-default btn-xs" style="color: dodgerblue;">View file</a></td>
                         <td>
-                          @if($d->spdReport->spdReportApproval && $d->spdReport->spdReportApproval->status == 0)
-                                <span class="label label-warning">Waiting approval</span>
-                              @elseif($d->spdReport->spdReportApproval && $d->spdReport->spdReportApproval->status == 1)
-                                <span class="label label-success">Approved</span>
-                              @else
-                                <span class="label label-danger">Rejected</span>
-                              @endif
+                          @if($d->spdReport->spdReportApproval->hr_status == 0 )
+                                  <span class="label label-warning">Request Process</span>
+                                  @elseif($d->spdReport->spdReportApproval->hr_status == 2 )
+                                  <span class="label label-danger">Request Rejected</span>
+                                  @elseif($d->spdReport->spdReportApproval->status == 0 )
+                                  <span class="label label-warning">Request Process</span>
+                                  @elseif($d->spdReport->spdReportApproval->status == 2 )
+                                  <span class="label label-danger">Request Rejected</span>
+                                  @elseif($d->spdReport->spdReportApproval->finance_status == 0)
+                                  <span class="label label-warning">Payment Process</span>
+                                  @elseif($d->spdReport->spdReportApproval->finance_status == 1)
+                                  <span class="label label-success">Payment Slip</span> 
+                                  @elseif($d->spdReport->spdReportApproval->finance_status == 2)
+                                  <span class="label label-danger">Payment Cancel</span> 
+                          @endif
                         </td>
                         <td>
-                            @if($d->spdReport->spdReportApproval && $d->spdReport->spdReportApproval->hr_status == 0)
-                            <span class="label label-warning">Waiting approval HC</span>
-                            @elseif($d->spdReport->spdReportApproval && $d->spdReport->spdReportApproval->hr_status == 1)
-                              <span class="label label-success">Approved by HC</span>
-                            @else
-                              <span class="label label-danger">Rejected</span>
-                            @endif
+                          @if ($d->spdReport->spdReportApproval->status == 0)
+                            Review Manager/PM/VP
+                            
+                            @elseif ($d->spdReport->spdReportApproval->status == 2)
+                            Rejected by Manager/PM
+                            @elseif ($d->spdReport->spdReportApproval->hr_status == 0)
+                            Waiting Approval HC
+                            @elseif ($d->spdReport->spdReportApproval->hr_status == 2)
+                            Rejected by HC
+                            @elseif ($d->spdReport->spdReportApproval->finance_status == 0)
+                            Finance (Upload Invoice)
+                            @elseif ($d->spdReport->spdReportApproval->finance_status == 1)
+                            Payment Slip
+                            @elseif ($d->spdReport->spdReportApproval->finance_status == 2)
+                            Payment Cancel
+                          @endif
                         </td>
                         <td>
-                          @if($d->spdReport->spdReportApproval && $d->spdReport->spdReportApproval->status == 0)
-                                <span></span>
-                            @elseif($d->spdReport->spdReportApproval && $d->spdReport->spdReportApproval->status == 1)
-                                <a href="{{route('upload-report',$d->id)}}" class="btn btn-default btn-xs" style="color: dodgerblue;">Upload file</span></a>
-                                @if($d->spdReport->upload_file != NULL || $d->spdReport->upload_file != "")
-                                  <a href="{{url('uploads/SpdReport/'.$d->spdReport->upload_file)}}" target="_blank" class="btn btn-default btn-xs" style="color: dodgerblue;">View file</a>
-                                @else 
-
-                                @endif
-                                
-                            @else
-                                <span></span>
-                            @endif
+                          @if($d->spdReport->upload_file != NULL || $d->spdReport->upload_file != "")
+                            <a href="{{url('uploads/SpdReport/'.$d->spdReport->upload_file)}}" target="_blank" class="btn btn-default btn-xs" style="color: dodgerblue;">View file</a>
+                          @else
+                          @endif
                         </td>
                         <td>
                             <a href="{{url('reportpdf',$d->id)}}" class="btn btn-primary btn-xs"><span class='glyphicon glyphicon-print'></span></a>

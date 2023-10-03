@@ -59,8 +59,8 @@
                             <th>Destination</th>
                             <th>Date Departure</th>
                             <th>Date Return</th>
-                            <th>Review By HC</th>
-                            <th>Approval User</th>
+                            <th>Status of Request</th>
+                            <th>Next Process</th>
                             <th>Upload File</th>
                             <th width="10%">Action</th>
                         </tr>
@@ -80,46 +80,57 @@
                             <td>{{date('d-M-Y', strtotime($d->tgl_keberangkatan))}}</td>
                             <td>{{date('d-M-Y', strtotime($d->tgl_pulang))}}</td>
                             <td>
-                              @if($d->spdApproval && $d->spdApproval->hr_status == 0)
-                                <span class="label label-warning">Status Review</span>
-                              @elseif($d->spdApproval && $d->spdApproval->hr_status == 1)
-                                <span class="label label-success">Approved</span>
-                              @else
-                                <span class="label label-danger">Rejected</span>
-                              @endif
-                            </td>
+                                @if($d->spdApproval->hr_status == 0 )
+                                  <span class="label label-warning">Request Process</span>
+                                  @elseif($d->spdApproval->hr_status == 2 )
+                                  <span class="label label-danger">Request Rejected</span>
+                                  @elseif($d->spdApproval->status == 0 )
+                                  <span class="label label-warning">Request Process</span>
+                                  @elseif($d->spdApproval->status == 2 )
+                                  <span class="label label-danger">Request Rejected</span>
+                                  @elseif($d->spdApproval->finance_status == 0)
+                                  <span class="label label-warning">Payment Process</span>
+                                  @elseif($d->spdApproval->finance_status == 1)
+                                  <span class="label label-success">Payment Slip</span> 
+                                  @elseif($d->spdApproval->finance_status == 2)
+                                  <span class="label label-danger">Payment Cancel</span> 
+                                @endif
+                            </td>   
+                            
                             <td>
-                              @if($d->spdApproval && $d->spdApproval->status == 0)
-                                <span class="label label-warning">Waiting approval</span>
-                              @elseif($d->spdApproval && $d->spdApproval->status == 1)
-                                <span class="label label-success">Approved</span>
-                              @else
-                                <span class="label label-danger">Rejected</span>
+                              @if ($d->spdApproval->hr_status == 0)
+                                      Review HC
+                                      
+                                @elseif ($d->spdApproval->hr_status == 2)
+                                Rejected by HC
+                                @elseif ($d->spdApproval->status == 0)
+                                Waiting Approval Man/PM/VP
+                                @elseif ($d->spdApproval->status == 2)
+                                Rejected by Manager/PM
+                                @elseif ($d->spdApproval->finance_status == 0)
+                                Finance (Upload Invoice)
+                                @elseif ($d->spdApproval->finance_status == 1)
+                                Payment Slip
+                                @elseif ($d->spdApproval->finance_status == 2)
+                                Payment Cancel
                               @endif
                             </td>
                             
                             <td>
-                              @if($d->spdApproval && $d->spdApproval->hr_status == 0)
-                                    <span></span>
-                                @elseif($d->spdApproval && $d->spdApproval->hr_status == 1)
-                                    <a href="{{route('upload-spd',$d->id)}}" class="btn btn-default btn-xs" style="color: dodgerblue;">Upload file</span></a>
-                                    @if($d->upload_file != NULL || $d->upload_file != "")
-                                      <a href="{{url('uploads/Spd/'.$d->upload_file)}}" target="_blank" class="btn btn-default btn-xs" style="color: dodgerblue;">View file</a>
-                                    @else 
-    
-                                    @endif
-                                    
-                                @else
-                                    <span></span>
-                                @endif
+                              @if($d->upload_file != NULL || $d->upload_file != "")
+                                <a href="{{url('uploads/Spd/'.$d->upload_file)}}" target="_blank" class="btn btn-default btn-xs" style="color: dodgerblue;"> View File</a>
+                              @else
+
+                              @endif
                             </td>
+                            
                             <td>
                                 <a href="{{url('downloadpdf',$d->id)}}" class="btn btn-primary btn-xs"><span class='glyphicon glyphicon-print'></span></a>
                                 <a href="{{route('edit-spd',$d->id)}}" class="btn btn-warning btn-xs"><span class='glyphicon glyphicon-pencil'></span></a>
-                                @if($d->spdApproval && $d->spdApproval->status == 0)
+                                @if($d->spdApproval && $d->spdApproval->hr_status == 0)
                                 <button class='btn btn-xs btn-danger delete' data-id="{{$d->id}}"><span class='glyphicon glyphicon-trash'></span></button></td>
                                 @else
-                                  @if($d->spdApproval && $d->spdApproval->status == 2)                       
+                                  @if($d->spdApproval && $d->spdApproval->hr_status == 2 || $d->spdApproval->status == 2)                       
                                   <button class='btn btn-xs btn-danger delete' data-id="{{$d->id}}"><span class='glyphicon glyphicon-trash'></span></button></td>
                                   @endif
                                 @endif

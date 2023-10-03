@@ -7,7 +7,7 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class SpdNeedRequestClear extends Notification
+class SpdNeedFinanceCancel extends Notification
 {
     use Queueable;
     
@@ -28,7 +28,7 @@ class SpdNeedRequestClear extends Notification
         return (new MailMessage)
                     ->subject('SPD Request Approval')
                     ->greeting("Dear Bapak/Ibu {$this->spd->employee->nama}")
-                    ->line("Finance Division telah menyelesaikan proses transaksi uang muka Surat Perjalanan Dinas anda, mohon untuk segera melihat bukti transaksi melalui website riisa.rapidinfrastruktur.com")
+                    ->line("Mohon maaf Finance Division telah melakukan pembatalan terhadap Uang Muka Surat Perjalanan Dinas yang anda ajukan, mohon untuk segera melakukan pengajuan kembali website riisa.rapidinfrastruktur.com")
                     ->action('Buka RIISA', url('http://riisa.rapidinfrastruktur.com'))
                     ->line('Terima kasih.');
     }

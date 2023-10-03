@@ -1,7 +1,7 @@
 @extends('templates.header')
 
 @php
- $isEnabled = $spd->employee->spd_report_to != Auth::user()->user_login->id && $spd->spdApproval->status == 0;   
+ $isEnabled = $spd->employee->spd_report_to != Auth::user()->user_login->id && $spd->spdReport->spdReportApproval->finance_status == 0;   
 @endphp
 @section('content')
 <section class="content">
@@ -23,7 +23,7 @@
                     @csrf
                 <div class="form-group">
                     <label for="tgl_keberangkatan">Form Date</label>
-                    <input type="date" data-date-format="yyyy/mm/dd" class="form-control" {{ $isEnabled ? '' : 'disabled' }} id="form_date" name="form_date" placeholder="yyyy/mm/dd" value="{{$spd->form_date != '' ? $spd->form_date : ''}}">
+                    <input type="date" data-date-format="yyyy/mm/dd" class="form-control" disabled id="form_date" name="form_date" placeholder="yyyy/mm/dd" value="{{$spd->form_date != '' ? $spd->form_date : ''}}">
                 </div> 
                 <div class="form-group">
                     <label for="nama">Name*</label>
@@ -40,7 +40,7 @@
                     <input type="text" class="form-control" id="divisi_nama" name="divisi_nama" value="{{$spd->get_divisi->nama ?: '-'}}" placeholder="" readonly >
                     <input type="hidden" class="form-control" id="divisi_id" name="divisi_id" value="{{$spd->divisi_id}}">
                 </div>
-
+                
                 <div class="form-group">
                     <label for="divisi_nama">Position*</label>
                     <input type="text" class="form-control" id="divisi_nama" name="divisi_nama" value="{{$spd->employee->jabatan->jenis_jabatan ?: '-'}}" placeholder="" readonly >
@@ -49,7 +49,7 @@
 
                 <div class="form-group">
                     <label for="travel_type"> Travel Type*</label>
-                    <select class="form-control select2"  {{ $isEnabled ? '' : 'disabled' }} name="travel_type" id="travel_type" style="width: 100%;" required>
+                    <select class="form-control select2"  disabled name="travel_type" id="travel_type" style="width: 100%;" required>
                     <option selected disabled>-- Travel Type -- </option>
                     <option value='Domestic' {{$spd->travel_type == 'Domestic' ? 'selected' : ''  }}>Domestic</option>
                     <option value='International' {{$spd->travel_type == 'International' ? 'selected' : ''  }}>International</option>
@@ -68,41 +68,41 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="assignment_type"> Costs*</label>
-                    <select class="form-control select2" {{ $isEnabled ? '' : 'disabled' }} name="assignment_type" id="assignment_type" style="width: 100%;" value="{{$spd->assignment_type}}" required>
-                    <option selected disabled>-- Costs -- </option>
+                    <label for="assignment_type"> Assignment Type*</label>
+                    <select class="form-control select2" disabled name="assignment_type" id="assignment_type" style="width: 100%;" value="{{$spd->assignment_type}}" required>
+                    <option selected disabled>-- Assignment Type -- </option>
 
-                    <option value='Head Office' {{$spd->assignment_type == 'Head Office' ? 'selected' : ''  }}>Head Office</option>
-                    <option value='Project Aquatech' {{$spd->assignment_type == 'Project Aquatech' ? 'selected' : ''  }}>Project Aquatech</option>
-                    <option value='Project Tangguh' {{$spd->assignment_type == 'Project Tangguh' ? 'selected' : ''  }}>Project Tangguh</option>
+                    <option value='Normal' {{$spd->assignment_type == 'Normal' ? 'selected' : ''  }}>Normal</option>
+                    <option value='On Duty 24 Hours' {{$spd->assignment_type == 'On Duty 24 Hours' ? 'selected' : ''  }}>On Duty 24 Hours</option>
+                    <option value='Visit' {{$spd->assignment_type == 'Visit' ? 'selected' : ''  }}>Visit</option>
                     </select>
                 </div>
 
                 <div class="form-group" id="purpose">
-                    <label for="purpose">Reason*</label>
-                    <textarea id="purpose" name="purpose" rows="4" cols="50" class="form-control" {{ $isEnabled ? '' : 'disabled' }} required>{{$spd->purpose}}</textarea>
+                    <label for="purpose">Purpose*</label>
+                    <textarea id="purpose" name="purpose" rows="4" cols="50" class="form-control" disabled required>{{$spd->purpose}}</textarea>
                 </div>
 
                 <div class="form-group" id="asal">
                     <label for="asal">From*</label>
-                    <input type="text" id="asal" name="asal" rows="4" cols="50" class="form-control" {{ $isEnabled ? '' : 'disabled' }} value="{{$spd->asal}}" required>
+                    <input type="text" id="asal" name="asal" rows="4" cols="50" class="form-control" disabled value="{{$spd->asal}}">
                 </div>
 
                 <div class="form-group" id="tujuan">
                     <label for="tujuan">Destination*</label>
-                    <input type="text" id="tujuan" name="tujuan" rows="4" cols="50" class="form-control" {{ $isEnabled ? '' : 'disabled' }} value="{{$spd->tujuan}}" required>
+                    <input type="text" id="tujuan" name="tujuan" rows="4" cols="50" class="form-control" disabled value="{{$spd->tujuan}}" >
                 </div>
             </div>
 
             <div class="col-xs-12 col-xl-6 col-lg-6">
                 <div class="form-group">
                     <label for="tgl_keberangkatan">Date Departure*</label>
-                    <input type="date" data-date-format="yyyy/mm/dd" class="form-control" {{ $isEnabled ? '' : 'disabled' }} id="tgl_keberangkatan" name="tgl_keberangkatan"  placeholder="yyyy/mm/dd"  value="{{$spd->tgl_keberangkatan != '' ? $spd->tgl_keberangkatan : '' }}" required >
+                    <input type="date" data-date-format="yyyy/mm/dd" class="form-control" disabled id="tgl_keberangkatan" name="tgl_keberangkatan"  placeholder="yyyy/mm/dd"  value="{{$spd->tgl_keberangkatan != '' ? $spd->tgl_keberangkatan : '' }}" >
                 </div>
 
                 <div class="form-group">
                     <label for="tgl_pulang">Date Return*</label>
-                    <input type="date" data-date-format="yyyy/mm/dd" class="form-control" {{ $isEnabled ? '' : 'disabled' }} id="tgl_pulang" name="tgl_pulang"  placeholder="yyyy/mm/dd"  value="{{$spd->tgl_pulang != '' ? $spd->tgl_pulang : '' }}" required >
+                    <input type="date" data-date-format="yyyy/mm/dd" class="form-control" disabled id="tgl_pulang" name="tgl_pulang"  placeholder="yyyy/mm/dd"  value="{{$spd->tgl_pulang != '' ? $spd->tgl_pulang : '' }}">
                 </div>
 
                 <div class="form-group">
@@ -116,8 +116,8 @@
                 </div>
 
                 <div class="form-group">
-                <label for="idr">Contigensies</label>
-                <input type="idr" name="idr" id="idr" rows="4" cols="50" class="form-control" {{ $isEnabled ? '' : 'disabled' }} value="{{$spd->idr}}">
+                <label for="idr">Additional Cost</label>
+                <input type="idr" name="idr" id="idr" rows="4" cols="50" class="form-control" disabled value="{{$spd->idr}}">
                 </div>
 
                 <div class="form-group">
@@ -127,45 +127,72 @@
 
                 <div class="form-group" id="travel_by">
                     <label for="travel_by">Travel By*</label>
-                    <input type="tavel_by" name="travel_by" rows="4" cols="50" class="form-control" {{ $isEnabled ? '' : 'disabled' }} value="{{$spd->travel_by}}" required>
+                    <input type="tavel_by" name="travel_by" rows="4" cols="50" class="form-control" disabled value="{{$spd->travel_by}}">
                 </div>
 
                 <div class="form-group">
                     <label for="advance_payment"> Advance Payment*</label>
-                    <select class="form-control select2" {{ $isEnabled ? '' : 'disabled' }} name="advance_payment" id="advance_payment" style="width: 100%;"  value="{{$spd->advance_payment}}" required>
+                    <select class="form-control select2" disabled name="advance_payment" id="advance_payment" style="width: 100%;"  value="{{$spd->advance_payment}}">
                     <option selected disabled>--Advance Payment -- </option>
                     <option value='Yes' {{$spd->advance_payment == 'Yes' ? 'selected' : ''  }}>Yes</option>
                     <option value='No' {{$spd->advance_payment == 'No' ? 'selected' : ''  }}>No</option>
                     </select>
                 </div>
 
+                <div class="form-group">
+                    <label for="cash_out">Cash Out*</label>
+                    <input type="number" id="cash_out" name="cash_out"  class="form-control" disabled value="{{$spd->spdReport->cash_out}}" required/>
+                    
+                </div>
                 
 
-                <div class="form-group" id="sign_received">
-                    <label for="sign_received">Sign Received</label>
-                    <input type="sign_received" name="sign_received" rows="4" cols="50" class="form-control" {{ $isEnabled ? '' : 'disabled' }} value="{{$spd->sign_received}}">
+                <div class="form-group report_tgl_keberangkatan_wrapper">
+                    <label for="report_tgl_keberangkatan">Date Departure Report*</label>
+                    <input type="date" data-date-format="yyyy/mm/dd" class="form-control" id="report_tgl_keberangkatan"  name="report_tgl_keberangkatan" value="{{$spd->spdReport->report_tgl_keberangkatan->format('Y-m-d')}}" placeholder="yyyy/mm/dd" readonly >
+                    
                 </div>
 
-                <div class="form-group" id="note">
-                    <label for="note">Note</label>
-                    <textarea id="note" name="note" rows="4" cols="50" class="form-control" {{ $isEnabled ? '' : 'disabled' }}> {{$spd->note}}</textarea>
+                <div class="form-group report_tgl_pulang_wrapper">
+                    <label for="report_tgl_pulang">Date Return Report*</label>
+                    <input type="date" data-date-format="yyyy/mm/dd" class="form-control" id="report_tgl_pulang"  name="report_tgl_pulang" value="{{$spd->spdReport->report_tgl_pulang->format('Y-m-d')}}" placeholder="yyyy/mm/dd" readonly >
+                    
                 </div>
-                @if($spd->employee->spd_report_to != Auth::user()->user_login->id)
-                    <button type="submit" class="btn btn-primary">Perbaharui</button>
-                    <a href="{{url("pengajuan-spd")}}" class="btn btn-danger">Batal</a>
-                @elseif($spd->spdApproval && $spd->spdApproval->status == 0)
+
+                {{-- @dump($spd->spdReport) --}}
+                <div class="form-group total_eat_report_wrapper">
+                    <label for="total_eat_report">Total Eat Report</label>
+                    <input type="number" id="total_eat_report"  name="total_eat_report" value="{{$spd->spdReport->total_eat_report}}"  class="form-control" readonly>
+                </div>
+
+                <div class="form-group total_allowance_report_wrapper">
+                    <label for="total_allowance_report">Total Allowance Report</label>
+                    <input type="number" id="total_allowance_report"  name="total_allowance_report" value="{{$spd->spdReport->total_allowance_report}}"  class="form-control" readonly>
+                </div>
+
+                <div class="form-group cash_out_wrapper">
+                    <label for="cash_out">Contigensies*</label>
+                    <input type="number" id="cash_out" name="cash_out"  value="{{$spd->spdReport->cash_out}}"  class="form-control"  disabled/>                     
+                </div>
+
+                <div class="form-group expense_received_wrapper">
+                    <label for="expense_received">Total Expanse</label>
+                    <input type="number" id="expense_received"  name="expense_received"  value="{{$spd->spdReport->expense_received}}" class="form-control" readonly>
+                </div>
+
+               
+
+
+                @if($spd->spdReport && $spd->spdReport->spdReportApproval->finance_status == 0)
                 <div class="dropdown">
                     <button type="button" class="btn btn-secondary dropdown-toggle btn-xs" data-toggle="dropdown">
-                        Action
-                        <span class="fa fa-caret-down"></span>
+                        Action 
+                        <span class="fa fa-caret-down"></span> 
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a href="javascript:;" class="approved_spd"><i class="fa fa-check" aria-hidden="true" style="color:blue"></i>Approve</a></li>
-                        <li><a href="javascript:;" class="rejected_spd"><i class="fa fa-ban" style="color:red" aria-hidden="true"></i>Reject</a></li>
+                        <li><a href="javascript:;" class="approved_spd_report"><i class="fa fa-check" aria-hidden="true" style="color:blue"></i>Payment Clear</a></li>
                     </ul>
-                </div>
+                    </div>
                 @endif
-                
             </div>
     </form>
         </div>
@@ -266,34 +293,18 @@ $('#idr').on('change', function () {
 });
  
 
-    $('.approved_spd').click(function(){
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
-        $.ajax({
-            url: "/spd/{{$spd->id}}/approve",
-            type: 'GET',
-            success: function(data) {
-                window.location.href = '/spd-request';
-            }
-        });
+$('.approved_spd_report').click(function(){
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
     });
 
-    $('.rejected_spd').click(function(){
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
         $.ajax({
-            url: "/spd/{{$spd->id}}/reject",
+            url: "/list-spd-report/{{$spd->id}}/approve",
             type: 'GET',
             success: function(data) {
-                window.location.href = '/spd-request';
+                window.location.href = '/list-spd-report';
             }
         });
     });

@@ -6,7 +6,10 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\Controller;
+use App\Notifications\SpdNeedHrdRejected;
 use App\Notifications\SpdNeedUserApproval;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\SpdReportNeedFinanceRequest;
 
 class SPDController extends Controller
 {
@@ -136,6 +139,8 @@ class SPDController extends Controller
 
         $spdApproval->hr_status = 2; // status Rejected
         $spdApproval->save();
+
+        $spd->employee->notify(new SpdNeedHrdRejected($spd));
     }
 
     public function reportApproved($id)
@@ -145,8 +150,10 @@ class SPDController extends Controller
     
         $spdReportApproval->hr_status = 1; // status approved
         $spdReportApproval->save();
+
+        Notification::route('mail', 'grace@rapidinfrastruktur.com')
+            ->notify(new SpdReportNeedFinanceRequest($spd));
     
-        $spd->employee->increment('spd_limit', 1);
     }
 
     public function reportRejected($id)

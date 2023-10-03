@@ -279,16 +279,16 @@
               <a href="{{ url('pengajuan-advance')}}">
                 <i class="fa fa-edit"></i>Add Cash Advance
                 <span class="pull-right-container">
-                  <span class="label label-warning pull-right"><?php echo navigation::requestPembelian()?></span>
+                 
                 </span>
               </a>
             </li>
 
             <li class="">
-              <a href="#">
+              <a href="{{ url('payment-request')}}">
                 <i class="fa fa-edit"></i>Payment Request
                 <span class="pull-right-container">
-                  <span class="label label-warning pull-right"><?php echo navigation::requestPengeluaran()?></span>
+                  
                 </span>
               </a>
             </li>
@@ -1012,6 +1012,15 @@
           <li class="treeview">
             <a href="{{url('list-advance')}}">
                 <i class="fa fa-check-square-o"></i> <span>Advance Payment</span>
+                <span class="pull-right-container">
+                  <span class="label label-warning pull-right"><?php echo navigation::countListPayment()?></span>
+                </span>
+              </a>
+          </li>
+
+          <li class="treeview">
+            <a href="{{url('list-spd')}}">
+                <i class="fa fa-check-square-o"></i> <span>Payment SPD</span>
                 <span class="pull-right-container">
                   <span class="label label-warning pull-right"><?php echo navigation::countListPayment()?></span>
                 </span>

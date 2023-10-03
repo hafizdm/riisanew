@@ -5,17 +5,21 @@ use \PDF;
 use App\SPD;
 use \App\User;
 use \App\Employee;
-use App\SpdApproval;
 use App\SpdReport;
+use Carbon\Carbon;
+use App\SpdApproval;
+use Carbon\CarbonPeriod;
+use App\SpdReportApproval;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Notifications\SpdNeedHrdApproval;
 use App\Notifications\SpdNeedRequestClear;
-use App\SpdReportApproval;
-use Illuminate\Support\Facades\Auth;
-use Carbon\Carbon;
-use Carbon\CarbonPeriod;
+use App\Notifications\SpdNeedUserRejected;
+use App\Notifications\SpdNeedFinanceRequest;
+use App\Notifications\SpdReportNeedHrdApproval;
 use Illuminate\Support\Facades\Notification;
+use App\Notifications\SpdReportNeedUserApproval;
 
 class SPDController extends Controller
 {
@@ -158,7 +162,7 @@ class SPDController extends Controller
             $spd->save();
 
             // Static receiver
-            Notification::route('mail', 'iwan.krisnawan@rapidinfrastruktur.com')
+            Notification::route('mail', 'hrd@rapidinfrastruktur.com')
             ->notify(new SpdNeedHrdApproval($spd));
 
             return redirect('pengajuan-spd')->with('success', 'Data berhasil ditambahkan');
@@ -225,6 +229,7 @@ class SPDController extends Controller
             $spd->idr = $request->get('idr');
             $spd->sign_received = $request->get('sign_received');
             $spd->note = $request->get('note');
+            $spd->balance_received = $spd->total_eat + $spd->total_allowance + $spd->idr;
             if ($spd->travel_type == 'Domestic') {
                 $spd->eat_per_day = auth()->user()->user_login->jabatan->eat_per_day_domestic;
                 $spd->allowance = auth()->user()->user_login->jabatan->allowance_per_day_domestic;
@@ -233,6 +238,8 @@ class SPDController extends Controller
                 $spd->allowance = auth()->user()->user_login->jabatan->allowance_per_day_international;
             }
             $spd->save();
+
+            
 
             return redirect('/pengajuan-spd')->with('success', 'Data  berhasil di Update');
         }
@@ -308,56 +315,56 @@ class SPDController extends Controller
         }
     }
 
-    public function showUploadSPD($id)
-    {
-        $data['spd']= SPD::find($id);
-        return view('spd/upload_form_spd')->with($data);
-    }
+    // public function showUploadSPD($id)
+    // {
+    //     $data['spd']= SPD::find($id);
+    //     return view('spd/upload_form_spd')->with($data);
+    // }
 
-    public function showUploadReport($id)
-    {
-        $data['spd_reports']= SPD::find($id);
-        return view('spdreport/upload_form_report')->with($data);
-    }
+    // public function showUploadReport($id)
+    // {
+    //     $data['spd_reports']= SPD::find($id);
+    //     return view('spdreport/upload_form_report')->with($data);
+    // }
 
-    public function updateUploadSpd(Request $request,$id)
-    {
-        $data = SPD::find($id);
-
-        
-        $files = $request->file('upload_file');
-        
-        // return $files;
-        $destinationPath = 'uploads/'.$request->nik.'/'.'Spd'; // upload path
-        $file = "Spd_" . Carbon::now()->timestamp . "." . $files->getClientOriginalExtension();
-        $files->move($destinationPath, $file);
-        $uploadSpd= $file;
-
-        $data->upload_file = $uploadSpd;
-        $data->updated_at = Carbon::now()->toDateTimeString();
-        $data->save();
-
-        return redirect('pengajuan-spd')->with('success', 'File successfully updated');
-    }
-
-    public function updateUploadReport(Request $request,$id)
-    {
-        $data = SPD::find($id);
+    // public function updateUploadSpd(Request $request,$id)
+    // {
+    //     $data = SPD::find($id);
 
         
-        $files = $request->file('upload_file');
+    //     $files = $request->file('upload_file');
         
-        // return $files;
-        $destinationPath = 'uploads/'.$request->nik.'/'.'SpdReport'; // upload path
-        $file = "SpdReport_" . Carbon::now()->timestamp . "." . $files->getClientOriginalExtension();
-        $files->move($destinationPath, $file);
-        $uploadReport= $file;
+    //     // return $files;
+    //     $destinationPath = 'uploads/'.$request->nik.'/'.'Spd'; // upload path
+    //     $file = "Spd_" . Carbon::now()->timestamp . "." . $files->getClientOriginalExtension();
+    //     $files->move($destinationPath, $file);
+    //     $uploadSpd= $file;
 
-        $data->spdReport->upload_file = $uploadReport;
-        $data->spdReport->save();
+    //     $data->upload_file = $uploadSpd;
+    //     $data->updated_at = Carbon::now()->toDateTimeString();
+    //     $data->save();
 
-        return redirect('add-report')->with('success', 'File successfully updated');
-    }
+    //     return redirect('pengajuan-spd')->with('success', 'File successfully updated');
+    // }
+
+    // public function updateUploadReport(Request $request,$id)
+    // {
+    //     $data = SPD::find($id);
+
+        
+    //     $files = $request->file('upload_file');
+        
+    //     // return $files;
+    //     $destinationPath = 'uploads/'.$request->nik.'/'.'SpdReport'; // upload path
+    //     $file = "SpdReport_" . Carbon::now()->timestamp . "." . $files->getClientOriginalExtension();
+    //     $files->move($destinationPath, $file);
+    //     $uploadReport= $file;
+
+    //     $data->spdReport->upload_file = $uploadReport;
+    //     $data->spdReport->save();
+
+    //     return redirect('add-report')->with('success', 'File successfully updated');
+    // }
 
     public function indexRequest()
     {
@@ -457,7 +464,8 @@ class SPDController extends Controller
         $spdReportApproval->hr_status = 0;
         $spdReportApproval->save();
 
-
+         //Dynamic receiver
+         $spd->employee->reportTo->notify(new SpdReportNeedUserApproval($spd));
 
         return redirect('add-report')->with('success', 'File successfully updated');
         // dd(request(), $spd);
@@ -484,7 +492,8 @@ class SPDController extends Controller
         $spdApproval->status = 1; // status approved
         $spdApproval->save();
 
-        $spd->employee->notify(new SpdNeedRequestClear($spd));
+        Notification::route('mail', 'grace@rapidinfrastruktur.com')
+            ->notify(new SpdNeedFinanceRequest($spd));
     }
 
     public function spdRejected($id)
@@ -494,6 +503,8 @@ class SPDController extends Controller
 
         $spdApproval->status = 2; // status Rejected
         $spdApproval->save();
+
+        $spd->employee->notify(new SpdNeedUserRejected($spd));
     }
 
     public function reportApproved($id)
@@ -503,6 +514,9 @@ class SPDController extends Controller
 
         $spdReportApproval->status = 1; // status approved
         $spdReportApproval->save();
+
+        Notification::route('mail', 'hrd@rapidinfrastruktur.com')
+        ->notify(new SpdReportNeedHrdApproval($spd));
     }
 
     public function reportRejected($id)

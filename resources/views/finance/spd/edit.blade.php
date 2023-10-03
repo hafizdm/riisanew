@@ -147,18 +147,19 @@
                         </div> --}}
                         <br>
                         <div class="dropdown">
-                            @if($spd->spdApproval && $spd->spdApproval->hr_status == 0)
+                            @if($spd->spdApproval && $spd->spdApproval->finance_status == 0)
                         
                                 <button type="button" class="btn btn-secondary dropdown-toggle btn-xs" data-toggle="dropdown">
                                     Action
                                     <span class="fa fa-caret-down"></span>
                                 </button>
                                 <ul class="dropdown-menu">
-                                    <li><a href="javascript:;" class="approved_spd"><i class="fa fa-check" aria-hidden="true" style="color:blue"></i>Approve</a></li>
-                                    <li><a href="javascript:;" class="rejected_spd"><i class="fa fa-ban" style="color:red" aria-hidden="true"></i>Reject</a></li>
+                                    <li><a href="javascript:;" class="approved_spd"><i class="fa fa-check" aria-hidden="true" style="color:blue"></i>Payment Slip</a></li>
+                                    <li><a href="javascript:;" class="rejected_spd"><i class="fa fa-ban" style="color:red" aria-hidden="true"></i>Payment Cancel</a></li>
                                 </ul>
                             @endif
                         </div>
+                        
             </form>
                 </div>
               </div>
@@ -214,10 +215,10 @@
                     });
 
                     $.ajax({
-                        url: "/spd-hrd/{{$spd->id}}/approve",
+                        url: "/list-spd/{{$spd->id}}/approve",
                         type: 'GET',
                         success: function(data) {
-                            window.location.href = '/history-spd';
+                            window.location.href = '/list-spd';
                         }
                     });
                 });
@@ -230,10 +231,10 @@
                     });
 
                     $.ajax({
-                        url: "/spd-hrd/{{$spd->id}}/reject",
+                        url: "/list-spd/{{$spd->id}}/reject",
                         type: 'GET',
                         success: function(data) {
-                            window.location.href = '/history-spd';
+                            window.location.href = '/list-spd';
                         }
                     });
                 });

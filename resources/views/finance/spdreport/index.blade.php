@@ -82,13 +82,9 @@
                         <td>{{$cashOut}}</td> 
                         <td><a href="{{url('/uploads/SpdReport/report', $d->spdReport->upload_report)}}" target="_blank" class="btn btn-default btn-xs" style="color: dodgerblue;">View file</a></td>
                         <td>
-                          @if($d->spdReport->spdReportApproval->hr_status == 0 )
+                            @if($d->spdReport->spdReportApproval->status == 0 || $d->spdReport->spdReportApproval->hr_status == 0)
                             <span class="label label-warning">Request Process</span>
-                            @elseif($d->spdReport->spdReportApproval->hr_status == 2 )
-                            <span class="label label-danger">Request Rejected</span>
-                            @elseif($d->spdReport->spdReportApproval->status == 0 )
-                            <span class="label label-warning">Request Process</span>
-                            @elseif($d->spdReport->spdReportApproval->status == 2 )
+                            @elseif($d->spdReport->spdReportApproval->status == 2 || $d->spdReport->spdReportApproval->hr_status == 2)
                             <span class="label label-danger">Request Rejected</span>
                             @elseif($d->spdReport->spdReportApproval->finance_status == 0)
                             <span class="label label-warning">Payment Process</span>
@@ -96,18 +92,18 @@
                             <span class="label label-success">Payment Slip</span> 
                             @elseif($d->spdReport->spdReportApproval->finance_status == 2)
                             <span class="label label-danger">Payment Cancel</span> 
-                          @endif
+                            @endif
                         </td>
                         <td>
-                          @if ($d->spdReport->spdReportApproval->status == 0)
-                            Review Manager/PM/VP
+                            @if ($d->spdReport->spdReportApproval->hr_status == 0)
+                            Approval HC
                             
+                            @elseif ($d->spdReport->spdReportApproval->hr_status == 2)
+                            Rejected by Manager/PM
+                            @elseif ($d->spdReport->spdReportApproval->status == 0)
+                            Waiting Approval Man/PM/VP
                             @elseif ($d->spdReport->spdReportApproval->status == 2)
                             Rejected by Manager/PM
-                            @elseif ($d->spdReport->spdReportApproval->hr_status == 0)
-                            Waiting Approval HC
-                            @elseif ($d->spdReport->spdReportApproval->hr_status == 2)
-                            Rejected by HC
                             @elseif ($d->spdReport->spdReportApproval->finance_status == 0)
                             Finance (Upload Invoice)
                             @elseif ($d->spdReport->spdReportApproval->finance_status == 1)
@@ -117,14 +113,22 @@
                           @endif
                         </td>
                         <td>
-                          @if($d->spdReport->upload_file != NULL || $d->spdReport->upload_file != "")
-                            <a href="{{url('uploads/SpdReport/'.$d->spdReport->upload_file)}}" target="_blank" class="btn btn-default btn-xs" style="color: dodgerblue;">View file</a>
+                          @if($d->spdReport->spdReportApproval && $d->spdReport->spdReportApproval->finance_status == 0)
+                          <span></span>
+                          @elseif($d->spdReport->spdReportApproval && $d->spdReport->spdReportApproval->finance_status == 1)
+                              <a href="{{route('upload_finance_report',$d->id)}}" class="btn btn-default btn-xs" style="color: dodgerblue;">Upload file</span></a>
+                              @if($d->spdReport->upload_file != NULL || $d->spdReport->upload_file != "")
+                                <a href="{{url('uploads/SpdReport/'.$d->spdReport->upload_file)}}" target="_blank" class="btn btn-default btn-xs" style="color: dodgerblue;">View file</a>
+                              @else 
+
+                              @endif                  
                           @else
-                          @endif
+                          <span></span>
+                      @endif
                         </td>
                         <td>
                             <a href="{{url('reportpdf',$d->id)}}" class="btn btn-primary btn-xs"><span class='glyphicon glyphicon-print'></span></a>
-                            <a href="{{route('edit-report-hrd',$d->id)}}" class="btn btn-warning btn-xs"><span class='glyphicon glyphicon-pencil'></span></a>
+                            <a href="{{route('edit_payment_spd_report',$d->id)}}" class="btn btn-warning btn-xs"><span class='glyphicon glyphicon-pencil'></span></a>
                         </td>
 
                     </tr>

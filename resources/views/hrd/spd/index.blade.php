@@ -58,8 +58,8 @@
                             <th>Advance Payment</th>
                             <th>Total Balance</th>
                             <th>Sign Received</th>
-                            <th>Status Review</th>
-                            <th>Approval User</th>
+                            <th>Status of Request</th>
+                            <th>Next Process</th>
                             <th><center>File Upload</center></th>
                             <th>Action</th>
                             
@@ -104,24 +104,43 @@
                             <td>{{$d->sign_received}}</td>
 
                             <td>
-                              @if($d->spdApproval && $d->spdApproval->hr_status == 0)
-                                  <span class="label label-warning">Waiting for Review</span>
-                                @elseif($d->spdApproval && $d->spdApproval->hr_status == 1)
-                                  <span class="label label-success">Approved</span>
-                                @else
-                                  <span class="label label-danger">Rejected</span>
+                              @if($d->spdApproval->hr_status == 0 )
+                                  <span class="label label-warning">Request Process</span>
+                                  @elseif($d->spdApproval->hr_status == 2 )
+                                  <span class="label label-danger">Request Rejected</span>
+                                  @elseif($d->spdApproval->status == 0 )
+                                  <span class="label label-warning">Request Process</span>
+                                  @elseif($d->spdApproval->status == 2 )
+                                  <span class="label label-danger">Request Rejected</span>
+                                  @elseif($d->spdApproval->finance_status == 0)
+                                  <span class="label label-warning">Payment Process</span>
+                                  @elseif($d->spdApproval->finance_status == 1)
+                                  <span class="label label-success">Payment Slip</span> 
+                                  @elseif($d->spdApproval->finance_status == 2)
+                                  <span class="label label-danger">Payment Cancel</span> 
                                 @endif
                             </td>
                             
                             <td>
-                              @if($d->spdApproval && $d->spdApproval->status == 0)
-                                  <span class="label label-warning">Waiting approval</span>
-                                @elseif($d->spdApproval && $d->spdApproval->status == 1)
-                                  <span class="label label-success">Approved</span>
-                                @else
-                                  <span class="label label-danger">Rejected</span>
-                                @endif
+                              @if ($d->spdApproval->hr_status == 0)
+                                      Review HC
+                                      
+                                @elseif ($d->spdApproval->hr_status == 2)
+                                Rejected by HC
+                                @elseif ($d->spdApproval->status == 0)
+                                Waiting Approval Man/PM/VP
+                                @elseif ($d->spdApproval->status == 2)
+                                Rejected by Manager/PM
+                                @elseif ($d->spdApproval->finance_status == 0)
+                                Finance (Upload Invoice)
+                                @elseif ($d->spdApproval->finance_status == 1)
+                                Payment Slip
+                                @elseif ($d->spdApproval->finance_status == 2)
+                                Payment Cancel
+                              @endif
                             </td>
+
+                            
 
                           
 

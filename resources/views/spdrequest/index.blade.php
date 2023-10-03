@@ -25,7 +25,7 @@
           <div style="margin-bottom: 20px">
             <a href="spd-report" class="btn btn-warning">Report SPD
             <span class="pull-right-circle">
-                  <span class="label label-danger pull-right">
+                  <span class="label label-danger">
                     @php
                     $spdReportCount = \App\SPD::query()
                       ->whereHas('spdReport', function ($query) {
@@ -44,8 +44,7 @@
                     {{$spdReportCount}}
                   </span>
             </span>
-            </a>
-            
+            </a>          
           </div>
 
         <div class="table-responsive">

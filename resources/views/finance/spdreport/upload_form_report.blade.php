@@ -97,7 +97,7 @@
           <div class="row">
               <!-- bilah kiri -->
             <div class="col-xs-12 col-xl-12 col-lg-12 col-12">
-              <form role="form" name="formdata" method="post" action="{{route('update-report-upload', $spd_reports->id)}}" enctype="multipart/form-data">
+              <form role="form" name="formdata" method="post" action="{{route('update_finance_report', $spd_reports->id)}}" enctype="multipart/form-data">
                 @method('PATCH') 
                 @csrf  
                  <div class="form-group">
@@ -131,7 +131,7 @@
                   <br>
                  </br>
                <button type="submit" class="btn btn-primary">Save</button>
-               <a href="{{url('add-report')}}" class="btn btn-danger">Cancel</a>
+               <a href="{{url('list-spd-report')}}" class="btn btn-danger">Cancel</a>
              
            </form>
             </div>

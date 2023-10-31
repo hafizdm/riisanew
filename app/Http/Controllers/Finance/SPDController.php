@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Finance;
 
-use App\Notifications\SpdNeedFinanceCancel;
 use App\SPD;
-use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use App\Notifications\SpdNeedRequestClear;
+use App\Notifications\SpdNeedFinanceCancel;
+use App\Notifications\SpdReportNeedFinanceClear;
 
 class SPDController extends Controller
 {
@@ -112,7 +113,7 @@ class SPDController extends Controller
     
         $spd->employee->increment('spd_limit', 1);
 
-        $spd->employee->notify(new SpdNeedRequestClear($spd));
+        $spd->employee->notify(new SpdReportNeedFinanceClear($spd));
     }
 
     public function uploadReport($id)

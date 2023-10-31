@@ -368,7 +368,7 @@
           Talavera Office Park, 12<sup>th</sup>
         Floor, Jl. T.B. Simatupang No. 23, RT 003/RW 001, Cilandak Bar., Kec. Cilandak, Kota Jakarta Selatan, Jakarta 12430
           <br />
-          <a href="http://www.rapidinfrastruktur.com">www.rapidinfrastruktur.com</a><span> | +61 21-80667339</span></p>
+          <a href="https://www.rapidinfrastruktur.com">www.rapidinfrastruktur.com</a><span> | +61 21-80667339</span></p>
     </div>
 
 </body>

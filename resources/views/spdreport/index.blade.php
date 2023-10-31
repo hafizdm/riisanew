@@ -90,7 +90,7 @@
                           </span>
                         </td>
                         <td>
-                            <a href="{{url('downloadpdf',$d->id)}}" class="btn btn-primary btn-xs"><span class='glyphicon glyphicon-print'></span></a>
+                          <a href="{{url('reportpdf',$d->id)}}" class="btn btn-primary btn-xs"><span class='glyphicon glyphicon-print'></span></a>
                             <a href="{{route('edit-report',$d->id)}}" class="btn btn-warning btn-xs"><span class='glyphicon glyphicon-pencil'></span></a>
                             {{-- <button class='btn btn-xs btn-danger delete' data-id="{{$d->id}}"><span class='glyphicon glyphicon-trash'></span></button></td> --}}
                         </td>

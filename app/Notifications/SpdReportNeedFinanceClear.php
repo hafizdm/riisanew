@@ -26,7 +26,7 @@ class SpdReportNeedFinanceClear extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject('SPD Request Approval')
+                    ->subject('SPD Report Approval')
                     ->greeting("Dear Bapak/Ibu {$this->spd->employee->nama}")
                     ->line("Finance Division telah menyelesaikan proses transaksi pelaporan uang muka Surat Perjalanan Dinas anda, mohon untuk segera melihat bukti transaksi melalui website riisa.rapidinfrastruktur.com")
                     ->action('Buka RIISA', url('http://riisa.rapidinfrastruktur.com'))

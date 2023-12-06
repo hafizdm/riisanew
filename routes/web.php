@@ -234,6 +234,23 @@ Route::group(['namespace' => 'Admin', 'middleware' => 'auth.admin'], function ()
 // 	Route::get('karyawan/cetak_pdf', 'KaryawanController@cetak_pdf');
 // 	Route::get('karyawan/cetak_excel', 'KaryawanController@cetak_excel');
 
+	//Master Data Scope Approval
+	Route::get('scope-approval','PurchaseRequestFormController@index');
+	Route::get('scope-approval/create','PurchaseRequestFormController@create');
+	Route::post('scope-approval/store','PurchaseRequestFormController@store');
+	Route::post('scope-approval/{id}', 'PurchaseRequestFormController@destroy')->name('delete-category');
+	Route::get('scope-approval/edit/{id}', 'PurchaseRequestFormController@edit')->name('edit-category');
+	Route::patch('scope-approval/update/{id}', 'PurchaseRequestFormController@update')->name('update-category');
+
+	//Purchase Request List Approval Admin 
+	Route::get('prf-list','PurchaseRequestFormController@indexPrf');
+	Route::get('prf-list/edit/{id}','PurchaseRequestFormController@editPrf')->name('edit-prf-list');
+	Route::get('prf-list/{id}/approve','PurchaseRequestFormController@listApprovedPrf');
+	Route::get('upload-prf-list/{id}','PurchaseRequestFormController@uploadFile')->name('upload_prf_list');
+	Route::patch('upload-prf-list/{id}','PurchaseRequestFormController@updateUpload')->name('update_prf_list');
+
+
+
 	//Master Data Divisi
 	Route::get('divisi','DivisiController@index');
 	Route::get('divisi/create','DivisiController@create');
@@ -807,6 +824,44 @@ Route::group(['namespace' => 'Finance', 'middleware' => 'auth.finance'], functio
 		Route::get('approval-expense/{id}','CashAdvanceController@editExpenseDirector')->name('edit_expense_approval');
 		Route::get('approval-expense/{id}/approve','CashAdvanceController@directorApprovedExpense');
 		Route::get('approval-expense/{id}/reject','CashAdvanceController@directorRejectedExpense');
+	});
+
+	Route::group(['namespace' => 'PRF'], function (){
+		//pengajuan purchase request item
+		Route::get('pengajuan-prf','PurchaseRequestFormController@index');
+		Route::get('pengajuan-prf/create','PurchaseRequestFormController@create');
+		Route::post('pengajuan-prf/store','PurchaseRequestFormController@store')->name('store_pengajuan_prf');
+		Route::get('pengajuan-prf/{id}','PurchaseRequestFormController@edit')->name('edit_pengajuan_prf');
+		Route::patch('pengajuan-prf/{id}','PurchaseRequestFormController@update')->name('update_pengajuan_prf');
+		Route::post('pengajuan-prf/{id}','PurchaseRequestFormController@destroy')->name('destroy_pengajuan_prf');
+		Route::get('pdf-prf/{id}','PurchaseRequestFormController@pdfPrf');
+
+
+
+		//request pengajuan purchase request item manager/pm/vp
+		Route::get('prf-request','PurchaseRequestFormController@indexRequest');
+		Route::get('prf-request/{id}','PurchaseRequestFormController@editPrfRequest')->name('edit_prf_request');
+		Route::get('prf-request/{id}/approve','PurchaseRequestFormController@userApprovedPrf');
+		Route::get('prf-request/{id}/reject','PurchaseRequestFormController@userRejectPrf');
+
+
+
+		//request approval purchase request item direktur
+		Route::get('prf-approvalco','PurchaseRequestFormController@indexCo');
+		Route::get('prf-approvalco/{id}','PurchaseRequestFormController@editPrfCo')->name('edit_prf_co');
+		Route::get('prf-approvalco/{id}/approve','PurchaseRequestFormController@coApprovedPrf');
+		Route::get('prf-approvalco/{id}/reject','PurchaseRequestFormController@coRejectPrf');
+
+
+
+		//request approval purchase request item direktur utama
+		Route::get('prf-approvalceo','PurchaseRequestFormController@indexCeo');
+		Route::get('prf-approvalceo/{id}','PurchaseRequestFormController@editPrfCeo')->name('edit_prf_ceo');
+		Route::get('prf-approvalceo/{id}/approve','PurchaseRequestFormController@ceoApprovedPrf');
+		Route::get('prf-approvalceo/{id}/reject','PurchaseRequestFormController@ceoRejectPrf');
+
+
+
 	});
 
 });

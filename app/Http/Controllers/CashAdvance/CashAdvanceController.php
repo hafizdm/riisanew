@@ -103,53 +103,53 @@ class CashAdvanceController extends Controller
     }
 
     public function update(Request $request, $id)
-{
-    try{
-        // dd($request->all());
-        $employee = Auth::user()->user_login;
-        $cashAdvance = $employee->cashAdvanceRequests()->findOrFail($id);
-        $cashAdvance->request_date = $request->get('request_date');
-        $cashAdvance->remarks = $request->get('remarks');
-        $cashAdvance->allocation = $request->get('allocation');
-        $cashAdvance->reason = $request->get('reason');
-        $cashAdvance->balance_received = (int)$request->get('balance_received');
+    {
+        try{
+            // dd($request->all());
+            $employee = Auth::user()->user_login;
+            $cashAdvance = $employee->cashAdvanceRequests()->findOrFail($id);
+            $cashAdvance->request_date = $request->get('request_date');
+            $cashAdvance->remarks = $request->get('remarks');
+            $cashAdvance->allocation = $request->get('allocation');
+            $cashAdvance->reason = $request->get('reason');
+            $cashAdvance->balance_received = (int)$request->get('balance_received');
 
-        if (request()->hasFile('item_file')) {
-            $fileInput = request()->file('item_file');
-            $fileName = str_replace('/', '-', $cashAdvance->id) . '.' . $fileInput->getClientOriginalExtension();
-            $fileInput->move('uploads/CashAdvance/itemfile', $fileName);
+            if (request()->hasFile('item_file')) {
+                $fileInput = request()->file('item_file');
+                $fileName = str_replace('/', '-', $cashAdvance->id) . '.' . $fileInput->getClientOriginalExtension();
+                $fileInput->move('uploads/CashAdvance/itemfile', $fileName);
 
-            $cashAdvance->item_file = $fileName;
+                $cashAdvance->item_file = $fileName;
+            }
+
+            $cashAdvance->status = 0; // waiting user approval
+            $cashAdvance->save();
+
+            $cashAdvanceRequestItemIds = [];
+            foreach ($request->get('items', []) as $item) {
+                // Find or initialize new record
+                $cashAdvanceRequestItem = $cashAdvance->cashAdvanceRequestItems()
+                    ->firstOrNew(['id' => $item['id']]);
+
+                $cashAdvanceRequestItem->description = $item['description'];
+                $cashAdvanceRequestItem->qty = $item['qty'];
+                $cashAdvanceRequestItem->estimate_unit_price = $item['unit_price'];
+                $cashAdvanceRequestItem->save();
+
+                $cashAdvanceRequestItemIds[] = $cashAdvanceRequestItem->id;
+            }
+
+            // Remove obsolete data
+            $cashAdvance->cashAdvanceRequestItems()
+                ->whereNotIn('id', $cashAdvanceRequestItemIds)
+                ->delete();
+
+                return redirect('pengajuan-advance')->with('success', 'Data berhasil ditambahkan');
+            } catch(\Exception $e){
+                report($e);
+                return redirect('pengajuan-advance')->with('failed', 'Silahkan Cek Kembali Inputan Anda');
         }
-
-        $cashAdvance->status = 0; // waiting user approval
-        $cashAdvance->save();
-
-        $cashAdvanceRequestItemIds = [];
-        foreach ($request->get('items', []) as $item) {
-            // Find or initialize new record
-            $cashAdvanceRequestItem = $cashAdvance->cashAdvanceRequestItems()
-                ->firstOrNew(['id' => $item['id']]);
-
-            $cashAdvanceRequestItem->description = $item['description'];
-            $cashAdvanceRequestItem->qty = $item['qty'];
-            $cashAdvanceRequestItem->estimate_unit_price = $item['unit_price'];
-            $cashAdvanceRequestItem->save();
-
-            $cashAdvanceRequestItemIds[] = $cashAdvanceRequestItem->id;
-        }
-
-        // Remove obsolete data
-        $cashAdvance->cashAdvanceRequestItems()
-            ->whereNotIn('id', $cashAdvanceRequestItemIds)
-            ->delete();
-
-        return redirect('pengajuan-advance')->with('success', 'Data berhasil ditambahkan');
-    } catch(\Exception $e){
-        report($e);
-        return redirect('pengajuan-advance')->with('failed', 'Silahkan Cek Kembali Inputan Anda');
     }
-}
 
     public function destroy($id)
     {

@@ -200,19 +200,35 @@
               </li>
             </ul>
         </li>
+
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-database"></i> <span>Master Data Procurement</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li class="">
+              <a href="{{ url('scope-approval') }}">
+                <i class="fa fa-user-circle-o"></i> <span>Scope of Approval</span>
+              </a>
+            </li>
+          </ul>
+      </li>
              
-      <li class="treeview">
+      {{-- <li class="treeview">
       <a href="{{url('listPO')}}">
           <i class="fa fa-clock-o"></i>Upload Procurement
           <span class="pull-right-container">
-            <span class="label label-warning pull-right"><?php echo navigation::countUploadPO()?></span>
+            <span class="label label-warning pull-right"></span>
           </span>
         </a>
-      </li>
+      </li> --}}
 
       <li class="treeview">
-        <a href="{{url('list-procurement')}}">
-            <i class="fa fa-list"></i>Procurement List
+        <a href="{{url('prf-list')}}">
+            <i class="fa fa-list"></i>Purchase Requsition List
             
           </a>
         </li>
@@ -239,33 +255,46 @@
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
+          
           <ul class="treeview-menu">
+
             <li class="">
-              <a href="{{ url('request') }}">
-                <i class="fa fa-edit"></i>Purchase of Item
+              <a href="{{ url('pengajuan-prf') }}">
+                <i class="fa fa-edit"></i>Purchase Request Form
                 <span class="pull-right-container">
                   <span class="label label-warning pull-right"><?php echo navigation::requestPembelian()?></span>
                 </span>
               </a>
             </li>
 
-            <li class="">
+            {{-- <li class="">
+              <a href="{{ url('request') }}">
+                <i class="fa fa-edit"></i>Purchase of Item 
+                <span class="pull-right-container">
+                  <span class="label label-warning pull-right"></span>
+                </span>
+              </a>
+            </li> --}}
+
+            
+
+            {{-- <li class="">
               <a href="{{ url('request-barang-keluar') }}">
                 <i class="fa fa-edit"></i>Outgoing Item
                 <span class="pull-right-container">
-                  <span class="label label-warning pull-right"><?php echo navigation::requestPengeluaran()?></span>
+                  <span class="label label-warning pull-right"></span>
                 </span>
               </a>
-            </li>
+            </li> --}}
 
           </ul>
         </li>
 
-        <li class="treeview">
+        {{-- <li class="treeview">
           <a href="{{ url('listRequest') }}">
              <i class="fa fa-list"></i><span>Item Request List</span>
           </a>
-        </li>
+        </li> --}}
 
         <li class="treeview">
           <a href="#">
@@ -379,22 +408,30 @@
             <i class="fa fa-dashboard"></i> <span>Dashboard</span>
           </a>
         </li>
-        <li class="treeview">
+        {{-- <li class="treeview">
           <a href="{{ url('approvalManager') }}">
             <i class="fa fa-check-square-o"></i><span>Approval Request Barang</span>
             <span class="pull-right-container">
-              <span class="label label-warning pull-right"><?php echo navigation::countRequestManager()?></span>
+              <span class="label label-warning pull-right"></span>
+            </span>
+          </a>
+        </li> --}}
+        <li class="treeview">
+          <a href="{{ url('prf-request') }}">
+            <i class="fa fa-check-square-o"></i><span>Approval PRF</span>
+            <span class="pull-right-container">
+              <span class="label label-warning pull-right"></span>
             </span>
           </a>
         </li>
-        <li class="treeview">
+        {{-- <li class="treeview">
           <a href="{{ url('po-pm') }}">
             <i class="fa fa-check-square-o"></i><span>Approval Purchase Order</span>
             <span class="pull-right-container">
-              <span class="label label-warning pull-right"><?php echo navigation::countPurchasePM()?></span>
+              <span class="label label-warning pull-right"></span>
             </span>
           </a>
-        </li>
+        </li> --}}
         
         <!--Updated by cici-->
         <li class="treeview">
@@ -581,24 +618,34 @@
             <a href="{{ url('') }}">
               <i class="fa fa-dashboard"></i> <span>Dashboard</span>
             </a>
-          </li>
+          {{-- </li>
           <li class="treeview">
             <a href="{{ url('approvalVP') }}">
               <i class="fa fa-check-square-o"></i><span>Approval Request Barang</span>
               <span class="pull-right-container">
-                <span class="label label-warning pull-right"><?php echo navigation::countRequestVP()?></span>
+                <span class="label label-warning pull-right"></span>
+              </span>
+            </a>
+          </li> --}}
+
+          <li class="treeview">
+            <a href="{{ url('prf-request') }}">
+              <i class="fa fa-check-square-o"></i><span>Approval PRF</span>
+              <span class="pull-right-container">
+                <span class="label label-warning pull-right"></span>
               </span>
             </a>
           </li>
           
-         <li class="treeview">
+         {{-- <li class="treeview">
             <a href="{{ url('po-vp') }}">
               <i class="fa fa-check-square-o"></i><span>Approval Purchase Order</span> 
               <span class="pull-right-container">
-                <span class="label label-warning pull-right"><?php echo navigation::countPurchaseVP()?></span>
+                <span class="label label-warning pull-right"></span>
               </span>
             </a>
-          </li>
+          </li> --}}
+
           <li class="treeview">
             <a href="#">
               <i class="fa fa-user"></i> <span>Human Capital</span>
@@ -696,18 +743,18 @@
           </a>
         </li>
         <li class="treeview">
-          <a href="{{ url('payment-ceo') }}">
-            <i class="fa fa-check-square-o"></i><span>Approval Payment</span>
+          <a href="{{ url('prf-approvalceo') }}">
+            <i class="fa fa-check-square-o"></i><span>Approval PRF</span>
             <span class="pull-right-container">
               <span class="label label-warning pull-right"><?php echo navigation::countPaymentCEO()?></span>
             </span>
           </a>
         </li>
-        <li class="treeview">
+        {{-- <li class="treeview">
           <a href="{{url('approval-timesheet-ceo')}}">
               <i class="fa fa-check-square-o"></i><span>Approval Time Sheet</span>
             </a>
-        </li>
+        </li> --}}
 
         <li class="treeview">
           <a href="{{ url('spd-request') }}">
@@ -715,11 +762,11 @@
           </a>
         </li>
 
-        <li class="treeview">
+        {{-- <li class="treeview">
           <a href="{{ url('#') }}">
             <i class="fa fa-file-text-o"></i><span>Leave Request</span>
           </a>
-        </li>
+        </li> --}}
           
         <li class="treeview">
           <a href="{{ url('ganti-password-ceo') }}/{{Auth::user()->id}}">
@@ -738,18 +785,18 @@
             <i class="fa fa-dashboard"></i> <span>Dashboard</span>
           </a>
         </li>
-        <li class="treeview">
+        {{-- <li class="treeview">
           <a href="{{ url('po') }}">
             <i class="fa fa-check-square-o"></i> <span>Approval Purchase Order</span>
               <span class="pull-right-container">
-                <span class="label label-warning pull-right"><?php echo navigation::countPurchaseCO()?></span>
+                <span class="label label-warning pull-right"></span>
               </span>
           </a>
-        </li>
+        </li> --}}
 
         <li class="treeview">
-          <a href="{{ url('payment-co') }}">
-            <i class="fa fa-check-square-o"></i><span>Approval Payment</span>
+          <a href="{{ url('prf-approvalco') }}">
+            <i class="fa fa-check-square-o"></i><span>Approval Purhcase Items</span>
             <span class="pull-right-container">
               <span class="label label-warning pull-right"><?php echo navigation::countPaymentCO()?></span>
             </span>
@@ -757,23 +804,39 @@
         </li>
 
         <li class="treeview">
-          <a href="{{ url('advance-request') }}">
-            <i class="fa fa-check-square-o"></i><span>Advance Review</span>
+          <a href="#">
+            <i class="fa fa-bank"></i> <span>Finance</span>
             <span class="pull-right-container">
-              <span class="label label-warning pull-right"></span>
+              <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
+          <ul class="treeview-menu">          
+            <li class="treeview">
+              <a href="#">
+                <i class="#"></i>
+                <span>Cash Advance</span>
+                <span class="pull-right-container">
+                  <i class="fa fa-angle-left pull-right"></i>
+                </span>
+              </a>
+              <ul class="treeview-menu">
+                <li><a href="{{ url('advance-request')}}">
+                  <i class="fa fa-check-square-o"></i><span>Advance Review</span>
+                  </a>
+                </li>
+                <li class="treeview">
+                  <a href="{{ url('approval-advance')}}">
+                    <i class="fa fa-check-square-o"></i><span>Approval Advance</span>
+                    <span class="pull-right-container">
+                     
+                    </span>
+                  </a>
+                </li>
+              </ul>
+            </li>         
+          </ul>
         </li>
-
-        <li class="treeview">
-          <a href="{{ url('approval-advance') }}">
-            <i class="fa fa-check-square-o"></i><span>Approval Advance</span>
-            <span class="pull-right-container">
-              <span class="label label-warning pull-right"></span>
-            </span>
-          </a>
-        </li>
-        
+       
         <li class="treeview">
           <a href="#">
             <i class="fa fa-user"></i> <span>Human Capital</span>

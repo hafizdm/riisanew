@@ -121,6 +121,7 @@
   <!-- fungsi javascript untuk menampilkan form dinamis  -->
   <!-- penjelasan :
   saat tombol add-more ditekan, maka akan memunculkan div dengan class copy -->
+  
   <script type="text/javascript">
     function recalculateBalanceReceived() {
       let sum = 0;

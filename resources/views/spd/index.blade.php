@@ -130,7 +130,7 @@
                                 @if($d->spdApproval && $d->spdApproval->hr_status == 0)
                                 <button class='btn btn-xs btn-danger delete' data-id="{{$d->id}}"><span class='glyphicon glyphicon-trash'></span></button></td>
                                 @else
-                                  @if($d->spdApproval && $d->spdApproval->hr_status == 2 || $d->spdApproval->status == 2)                       
+                                  @if($d->spdApproval && $d->spdApproval->hr_status == 2 || $d->spdApproval->status == 2 || $d->spdApproval->finance_status == 2)                       
                                   <button class='btn btn-xs btn-danger delete' data-id="{{$d->id}}"><span class='glyphicon glyphicon-trash'></span></button></td>
                                   @endif
                                 @endif
